@@ -51,6 +51,8 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
         ),
         dividerColor: const Color.fromARGB(255, 0, 28, 40),
+        bottomAppBarTheme: const BottomAppBarTheme(color: Color.fromARGB(230, 0, 28, 40)),
+        iconButtonTheme: const IconButtonThemeData(style: ButtonStyle(iconSize: MaterialStatePropertyAll(30)))
         // TODO: dialogTheme: const DialogTheme(),
       ),
     );

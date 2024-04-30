@@ -12,6 +12,10 @@ class MoscaBloc extends Bloc<MoscaEvent, MoscaState> {
     on<AddPlayer>(_addPlayerHandler);
 
     on<RegisterNewRound>(_onRegisterNewRoundHandler);
+
+    on<DeletePlayer>(_onDeletePlayerHandler);
+
+    on<UndoPlay>(_onUndoPlayHandler);
   }
 
   bool registerNewScoreTrigger(Map<String, int> scores) {
@@ -49,5 +53,44 @@ class MoscaBloc extends Bloc<MoscaEvent, MoscaState> {
     }
 
     emit(state.copyWith(players: newScores));
+  }
+
+  void _onDeletePlayerHandler(DeletePlayer event, Emitter<MoscaState> emit) {
+    final playerIndex = state.names.indexOf(event.playerName);
+
+    if (playerIndex == -1) return;
+
+    final newPlayersList = List<MoscaPlayer>.from(state.players)
+      ..removeWhere((element) => element.name == event.playerName);
+    emit(state.copyWith(players: newPlayersList));
+  }
+
+  void _onUndoPlayHandler(UndoPlay event, Emitter<MoscaState> emit) {
+    final newPlayersList = <MoscaPlayer>[];
+
+    for (final player in state.players) {
+
+      if (player.scoreHistory.isEmpty) {
+        newPlayersList.add(player.copyWith(
+          // When a player is recently added in the middle of the match, this
+          // will allow them to update their current score acording to the next
+          // higer current score.
+          currentScore: state.histories.map((aHistory) {
+            if (aHistory.isEmpty) return -1;
+
+            return aHistory[0];
+          })
+          .toList()
+          .reduce(max),
+        ));
+      } else {
+        newPlayersList.add(player.copyWith(
+          currentScore: player.scoreHistory.first,
+          scoreHistory: List<int>.from(player.scoreHistory)..removeAt(0),
+        ));
+      }
+    }
+
+    emit(state.copyWith(players: newPlayersList));
   }
 }

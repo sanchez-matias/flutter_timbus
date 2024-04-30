@@ -19,4 +19,10 @@ class RegisterNewRound extends MoscaEvent {
   const RegisterNewRound(this.scores);
 }
 
-// TODO: Change player name
+class DeletePlayer extends MoscaEvent {
+  final String playerName;
+
+  const DeletePlayer(this.playerName);
+}
+
+class UndoPlay extends MoscaEvent {}

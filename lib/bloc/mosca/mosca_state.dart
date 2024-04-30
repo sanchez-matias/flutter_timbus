@@ -9,9 +9,11 @@ class MoscaState extends Equatable {
 
   List<String> get names => players.map((player) => player.name).toList();
 
-  List<int> get currentScores => players.map((player) => player.currentScore).toList();
+  List<int> get currentScores =>
+      players.map((player) => player.currentScore).toList();
 
-  List<List<int>> get histories => players.map((player) => player.scoreHistory).toList();
+  List<List<int>> get histories =>
+      players.map((player) => player.scoreHistory).toList();
 
   int get numberOfPlayers => players.length;
 

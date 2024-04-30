@@ -24,25 +24,9 @@ class MoscaScreen extends StatelessWidget {
           ),
         ),
         title: const Text('La Mosca'),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              if (!context.mounted) return;
-
-              final name = await showNewPlayerDialog(context);
-              if (name == null || name == '') return;
-              moscaBloc.add(AddPlayer(name));
-            },
-            icon: const Icon(
-              Icons.person_add,
-              color: Colors.white,
-            ),
-            tooltip: 'Agregar jugador',
-          ),
-        ],
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 30, bottom: 85, left: 20),
+        padding: const EdgeInsets.only(top: 30, bottom: 30, left: 20),
         child: BlocBuilder<MoscaBloc, MoscaState>(
           builder: (context, state) {
             if (state.players.isEmpty) {
@@ -71,16 +55,79 @@ class MoscaScreen extends StatelessWidget {
         onPressed: () async {
           if (!context.mounted) return;
 
+          if ( moscaBloc.state.players.isEmpty) return;
           await showNewRoundDialog(context, moscaBloc.state.names);
-          final isValid =
-              moscaBloc.registerNewScoreTrigger(newScoreCubit.state);
-          if (!isValid) {
+          final isValid = moscaBloc.registerNewScoreTrigger(newScoreCubit.state);
+          if (!isValid){
             // ignore: use_build_context_synchronously
             await showBadInputDialog(context);
           }
           newScoreCubit.resetState();
         },
         child: const Icon(Icons.add),
+      ),
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: [
+            IconButton(
+              onPressed: () async {
+                if (!context.mounted) return;
+
+                final name = await showNewPlayerDialog(context);
+                if (name == null || name == '') return;
+                moscaBloc.add(AddPlayer(name));
+              },
+              icon: const Icon(
+                Icons.person_add,
+                color: Colors.white,
+              ),
+              tooltip: 'Agregar jugador',
+            ),
+
+            const SizedBox(width: 20),
+
+            IconButton(
+              onPressed: () async {
+                if (!context.mounted) return;
+                final deletedPlayer = await showDeletePlayerDialog(context, moscaBloc.state.names);
+                if (deletedPlayer == null) return;
+
+                if (!context.mounted) return;
+                final areYouSure = await showAreYouSureToDeleteDialog(context);
+
+                if (!areYouSure) return;
+                moscaBloc.add(DeletePlayer(deletedPlayer));
+              },
+              icon: const Icon(
+                Icons.person_remove,
+                color: Colors.white,
+              ),
+              tooltip: 'Eliminar jugador',
+            ),
+
+            const SizedBox(width: 20),
+
+            IconButton(
+              onPressed: () async {
+                if (moscaBloc.state.histories.where((aScoreHistory) => aScoreHistory.isNotEmpty).isEmpty) return;
+
+                if (!context.mounted) return;
+                final areYouSure = await showAreYouSureToUndoDialog(context);
+
+                if (!areYouSure) return;
+                moscaBloc.add(UndoPlay());
+              },
+              icon: const Icon(
+                Icons.undo,
+                color: Colors.white,
+              ),
+              tooltip: 'Deshacer última jugada',
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -100,6 +147,7 @@ class MoscaScreen extends StatelessWidget {
 
         return Column(
           children: [
+            // Player Name
             Text(
               names[index],
               style: const TextStyle(
@@ -107,11 +155,15 @@ class MoscaScreen extends StatelessWidget {
                 fontSize: 25,
               ),
             ),
+
+            // Player current score
             Text(
               points[index].toString(),
               style: const TextStyle(
                   fontSize: 23, color: Colors.red, fontWeight: FontWeight.bold),
             ),
+
+            // Player history of score
             ...List.generate(playerHistory.length,
                 (historyIndex) => Text(playerHistory[historyIndex].toString())),
           ],

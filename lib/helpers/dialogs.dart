@@ -55,7 +55,7 @@ Future<void> showNewRoundDialog(
       actions: [
         ElevatedButton.icon(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             },
             icon: const Icon(Icons.done),
             label: const Text('Listo'))
@@ -90,8 +90,101 @@ Future<void> showBadInputDialog(BuildContext context) async {
     builder: (context) => const AlertDialog(
       title: Text('Puntajes mal ingresados'),
       content: Text(
-        'Debes ingresar el puntaje correspondiente para todos los jugadores, incluso cuando no ha jugado la ronda.'
+          'Debes ingresar el puntaje correspondiente para todos los jugadores, incluso cuando no ha jugado la ronda.'),
+    ),
+  );
+}
+
+Future<String?> showDeletePlayerDialog(
+  BuildContext context,
+  List<String> names,
+) async {
+  String? deletedPlayer;
+
+  await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Seleccione el jugador retirado'),
+      content: SizedBox(
+        width: 400.0,
+        height: 30 + (50 * names.length).toDouble(),
+        child: ListView.builder(
+          itemCount: names.length,
+          itemBuilder: (context, index) => ListTile(
+            title: Text(names[index]),
+            onTap: () {
+              deletedPlayer = names[index];
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
       ),
     ),
   );
+
+  return deletedPlayer;
+}
+
+Future<bool> showAreYouSureToDeleteDialog(BuildContext context) async {
+  bool sure = false;
+
+  await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('¿Estás seguro?'),
+      content: const Text(
+          'Una vez eliminado no vas a poder recuperar al jugador. Solo podrás crear uno nuevo que entra colado.'),
+      actions: [
+        OutlinedButton.icon(
+            onPressed: () {
+              sure = false;
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.clear),
+            label: const Text('No')),
+        FilledButton.icon(
+          onPressed: () {
+            sure = true;
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.done),
+          label: const Text('Sí'),
+        ),
+      ],
+    ),
+  );
+
+  return sure;
+}
+
+Future<bool> showAreYouSureToUndoDialog(BuildContext context) async {
+  bool sure = false;
+
+  await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('¿Estás seguro?'),
+      content: const Text(
+          'Una vez deshecha no vas a poder recuperar los puntajes de la ronda.'),
+      actions: [
+        OutlinedButton.icon(
+            onPressed: () {
+              sure = false;
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.clear),
+            label: const Text('No')),
+        FilledButton.icon(
+          onPressed: () {
+            sure = true;
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.done),
+          label: const Text('Sí'),
+        ),
+      ],
+    ),
+  );
+
+  return sure;
 }
