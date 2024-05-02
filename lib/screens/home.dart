@@ -27,6 +27,16 @@ class HomeScreen extends StatelessWidget {
               icon: Icons.casino,
               routeName: 'generala',
             ),
+            _GameOptionButton(
+              title: 'Chinchón',
+              icon: Icons.healing_outlined,
+              routeName: 'chinchon',
+            ),
+            _GameOptionButton(
+              title: 'Ver Reglas',
+              icon: Icons.rule,
+              routeName: 'rules',
+            ),
           ],
         ),
       ),

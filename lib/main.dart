@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_timbus_annotations/bloc/blocs.dart';
-import 'package:flutter_timbus_annotations/bloc/new_score/new_score_cubit.dart';
 import 'package:flutter_timbus_annotations/screens/screens.dart';
+import 'package:flutter_timbus_annotations/theme/theme.dart';
 
 void main() => runApp(const BlocProviders());
 
@@ -37,24 +37,13 @@ class MyApp extends StatelessWidget {
       routes: {
         'home': (context) => const HomeScreen(),
         'mosca': (context) => const MoscaScreen(),
+        'truco':(context) => const TrucoScreen(),
+        'generala':(context) => const GeneralaScreen(),
+        'chinchon':(context) => const ChinchonScreen(),
+        'rules':(context) => const RulesScreen(),
+        
       },
-      theme: ThemeData.light().copyWith(
-        primaryColor: const Color.fromARGB(255, 250, 229, 210),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 0, 28, 40),
-          titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-        ),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 250, 229, 210),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: const Color.fromARGB(255, 0, 28, 40),
-          splashColor: Colors.white.withOpacity(0.5),
-          foregroundColor: Colors.white,
-        ),
-        dividerColor: const Color.fromARGB(255, 0, 28, 40),
-        bottomAppBarTheme: const BottomAppBarTheme(color: Color.fromARGB(230, 0, 28, 40)),
-        iconButtonTheme: const IconButtonThemeData(style: ButtonStyle(iconSize: MaterialStatePropertyAll(30)))
-        // TODO: dialogTheme: const DialogTheme(),
-      ),
+      theme: AppTheme(isDarkMode: false).getLightTheme(),
     );
   }
 }
