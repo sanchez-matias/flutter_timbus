@@ -19,6 +19,9 @@ class BlocProviders extends StatelessWidget {
         BlocProvider(
           create: (context) => MoscaBloc(),
         ),
+        BlocProvider(
+          create: (context) => TrucoCubit(),
+        ),
       ],
       child: const MyApp(),
     );
@@ -37,11 +40,10 @@ class MyApp extends StatelessWidget {
       routes: {
         'home': (context) => const HomeScreen(),
         'mosca': (context) => const MoscaScreen(),
-        'truco':(context) => const TrucoScreen(),
-        'generala':(context) => const GeneralaScreen(),
-        'chinchon':(context) => const ChinchonScreen(),
-        'rules':(context) => const RulesScreen(),
-        
+        'truco': (context) => const TrucoScreen(),
+        'generala': (context) => const GeneralaScreen(),
+        'chinchon': (context) => const ChinchonScreen(),
+        'rules': (context) => const RulesScreen(),
       },
       theme: AppTheme(isDarkMode: false).getLightTheme(),
     );

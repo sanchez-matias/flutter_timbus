@@ -1,6 +1,13 @@
 # Timbus Annotations
 
-This is an annotation app for typical gambling games of Argentina and part of South America.
+This is a score annotation app for typical gambling games from South America, mostly played in Uruguay and Argentina.
 
-It includes: Mosca
+It includes:
+
+- Mosca
+- Truco
+- Generala
+- Chinchón
+
+There is also a _Rules_ section where you can consult how to play every game.
 
