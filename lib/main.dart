@@ -22,6 +22,9 @@ class BlocProviders extends StatelessWidget {
         BlocProvider(
           create: (context) => TrucoCubit(),
         ),
+        BlocProvider(
+          create: (context) => GeneralaCubit(),
+        )
       ],
       child: const MyApp(),
     );
