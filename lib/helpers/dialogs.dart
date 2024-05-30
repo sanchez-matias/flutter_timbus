@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_timbus_annotations/widgets/choice_menu.dart';
+import 'package:flutter_timbus_annotations/widgets/numeric_input_menu.dart';
 
 Future<String?> showNewPlayerDialog(BuildContext context) async {
   final textController = TextEditingController(text: '');
@@ -51,6 +52,36 @@ Future<void> showNewRoundDialog(
         width: 400.0,
         height: 30 + (50 * names.length).toDouble(),
         child: ChoicePopUpMenu(names: names),
+      ),
+      actions: [
+        ElevatedButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.done),
+            label: const Text('Listo'))
+      ],
+    ),
+  );
+}
+
+Future<void> chinchonNewRoundDialog(
+  BuildContext context,
+  List<String> names,
+) async {
+  if (names.length <= 1) {
+    _showNotEnoughPlayersDialog(context);
+  }
+
+  await showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      title: const Text('Anota una nueva ronda'),
+      content: SizedBox(
+        width: 400.0,
+        height: 30 + (60 * names.length).toDouble(),
+        child: NumericInputMenu(names: names)
       ),
       actions: [
         ElevatedButton.icon(
