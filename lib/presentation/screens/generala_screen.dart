@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timbus_annotations/bloc/blocs.dart';
-import 'package:flutter_timbus_annotations/widgets/generala_player_loader.dart';
-import 'package:flutter_timbus_annotations/widgets/generala_radios.dart';
+import 'package:flutter_timbus_annotations/presentation/bloc/blocs.dart';
+import 'package:flutter_timbus_annotations/presentation/widgets/generala_player_loader.dart';
+import 'package:flutter_timbus_annotations/presentation/widgets/generala_radios.dart';
 
 class GeneralaScreen extends StatelessWidget {
   const GeneralaScreen({super.key});

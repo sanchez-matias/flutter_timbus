@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_timbus_annotations/widgets/choice_menu.dart';
-import 'package:flutter_timbus_annotations/widgets/numeric_input_menu.dart';
+import 'package:flutter_timbus_annotations/presentation/widgets/choice_menu.dart';
+import 'package:flutter_timbus_annotations/presentation/widgets/numeric_input_menu.dart';
 
 Future<String?> showNewPlayerDialog(BuildContext context) async {
   final textController = TextEditingController(text: '');

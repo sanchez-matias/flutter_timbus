@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timbus_annotations/bloc/blocs.dart';
-import 'package:flutter_timbus_annotations/screens/screens.dart';
-import 'package:flutter_timbus_annotations/theme/theme.dart';
+import 'package:flutter_timbus_annotations/presentation/bloc/blocs.dart';
+import 'package:flutter_timbus_annotations/presentation/screens/screens.dart';
+import 'package:flutter_timbus_annotations/config/theme/theme.dart';
 
 void main() => runApp(const BlocProviders());
 

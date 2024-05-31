@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:flutter_timbus_annotations/entities/chinchon_player.dart';
+import 'package:flutter_timbus_annotations/domain/entities/chinchon_player.dart';
 
 part 'chinchon_event.dart';
 part 'chinchon_state.dart';

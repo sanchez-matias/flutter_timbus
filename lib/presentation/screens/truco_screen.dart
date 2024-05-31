@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timbus_annotations/bloc/blocs.dart';
-import 'package:flutter_timbus_annotations/widgets/truco_square_drawer.dart';
+import 'package:flutter_timbus_annotations/presentation/bloc/blocs.dart';
+import 'package:flutter_timbus_annotations/presentation/widgets/truco_square_drawer.dart';
 
 class TrucoScreen extends StatelessWidget {
   const TrucoScreen({super.key});

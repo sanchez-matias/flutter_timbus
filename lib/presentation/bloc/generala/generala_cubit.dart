@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_timbus_annotations/entities/generala_player.dart';
+import 'package:flutter_timbus_annotations/domain/entities/generala_player.dart';
 
 part 'generala_state.dart';
 

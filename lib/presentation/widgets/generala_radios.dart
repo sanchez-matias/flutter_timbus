@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timbus_annotations/bloc/blocs.dart';
+import 'package:flutter_timbus_annotations/presentation/bloc/blocs.dart';
 
 class GeneralaRadios extends StatelessWidget {
   final int selectedRow;

@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_timbus_annotations/entities/mosca_player.dart';
+import 'package:flutter_timbus_annotations/domain/entities/mosca_player.dart';
 
 part 'mosca_event.dart';
 part 'mosca_state.dart';

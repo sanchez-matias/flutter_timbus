@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timbus_annotations/bloc/new_score/new_score_cubit.dart';
+import 'package:flutter_timbus_annotations/presentation/bloc/new_score/new_score_cubit.dart';
 
 class ChoicePopUpMenu extends StatefulWidget {
   final List<String> names;
