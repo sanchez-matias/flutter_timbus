@@ -91,6 +91,8 @@ class MoscaScreen extends StatelessWidget {
 
             IconButton(
               onPressed: () async {
+                if (moscaBloc.state.players.isEmpty) return;
+
                 if (!context.mounted) return;
                 final deletedPlayer = await showDeletePlayerDialog(context, moscaBloc.state.names);
                 if (deletedPlayer == null) return;
