@@ -4,3 +4,7 @@ export 'chinchon_screen.dart';
 export 'generala_screen.dart';
 export 'rules_screen.dart';
 export 'truco_screen.dart';
+export 'rules/mosca_rules_screen.dart';
+export 'rules/truco_rules_screen.dart';
+export 'rules/generala_rules_screen.dart';
+export 'rules/chinchon_rules.dart';

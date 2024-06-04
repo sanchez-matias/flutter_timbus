@@ -50,6 +50,10 @@ class MyApp extends StatelessWidget {
         'generala': (context) => const GeneralaScreen(),
         'chinchon': (context) => const ChinchonScreen(),
         'rules': (context) => const RulesScreen(),
+        'mosca_rules':(context) => const MoscaRulesScreen(),
+        'truco_rules':(context) => const TrucoRulesScreen(),
+        'generala_rules':(context) => const GeneralaRulesScreen(),
+        'chinchon_rules':(context) => const ChinchonRulesScreen()
       },
       theme: AppTheme(isDarkMode: false).getLightTheme(),
     );
