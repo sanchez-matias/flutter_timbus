@@ -20,6 +20,18 @@ class GeneralaScreen extends StatelessWidget {
               color: Colors.white,
             ),
           ),
+          actions: [
+            IconButton(
+              tooltip: 'Reiniciar',
+              onPressed: () {
+                context.read<GeneralaCubit>().reset();
+              },
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+            ),
+          ],
           title: const Text('Generala'),
         ),
         body: BlocBuilder<GeneralaCubit, GeneralaState>(
@@ -139,16 +151,17 @@ class TableCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final generalaCubit = BlocProvider.of<GeneralaCubit>(context);
-    final selectedPlayerScores =
-        generalaCubit.state.players[selectedPlayer].scoresList;
+    final player = generalaCubit.state.players[selectedPlayer];
 
     return Padding(
       padding: const EdgeInsets.all(5),
       child: Container(
         decoration: BoxDecoration(
-          color: selectedPlayerScores[selectedRow] == 0
-            ? const Color.fromARGB(90, 0, 28, 40)
-            : Colors.green,
+          color: player.isCellCrossedOut(selectedRow)
+              ? Colors.red
+              : player.scoresList[selectedRow] == 0
+                  ? Colors.grey
+                  : Colors.green,
           border: Border.all(),
           borderRadius: BorderRadius.circular(10),
         ),
@@ -156,14 +169,16 @@ class TableCell extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           onTap: () async {
             if (!context.mounted) return;
-            await showSetScoreDialog(
-                context, selectedPlayerScores[selectedRow]);
+            await showSetScoreDialog(context, player.scoresList[selectedRow]);
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Text(
-              selectedPlayerScores[selectedRow].toString(),
+              player.isCellCrossedOut(selectedRow)
+                  ? 'X'
+                  : player.scoresList[selectedRow].toString(),
               textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16),
             ),
           ),
         ),

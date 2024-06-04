@@ -18,10 +18,10 @@ class GeneralaCubit extends Cubit<GeneralaState> {
     emit(state.copyWith(players: playersList));
   }
 
-  void changeBoxValue({
+  void changeCellValue({
     required int playerIndex,
     required int rowIndex,
-    required int newValue,
+    required GeneralaCell newValue,
   }) {
     var playersListCopy = List<GeneralaPlayer>.from(state.players).toList();
     final player = state.players[playerIndex];
@@ -34,45 +34,7 @@ class GeneralaCubit extends Cubit<GeneralaState> {
     emit(state.copyWith(players: playersListCopy));
   }
 
-  void crossOutCell({
-    required int playerIndex,
-    required int rowIndex,
-  }) {
-    var playersListCopy = List<GeneralaPlayer>.from(state.players).toList();
-    final player = state.players[playerIndex];
-    final updatedPlayer = player.copyWith(
-      newScores: {},
-      crossedOutCells: [...player.crossedOutCells, rowIndex],
-    );
-
-    playersListCopy.removeAt(playerIndex);
-    playersListCopy.insert(playerIndex, updatedPlayer);
-    emit(state.copyWith(players: playersListCopy));
-  }
-
-  void removeCrossOut({
-    required int playerIndex,
-    required int rowIndex,
-  }) {
-    var playersListCopy = List<GeneralaPlayer>.from(state.players).toList();
-    final crossesListCopy = playersListCopy[playerIndex].crossedOutCells;
-    crossesListCopy.remove(rowIndex);
-
-    final playerCopy = state.players[playerIndex].copyWith(
-      newScores: {},
-      crossedOutCells: crossesListCopy,
-    );
-
-    playersListCopy.removeAt(playerIndex);
-    playersListCopy.insert(playerIndex, playerCopy);
-
-    emit(state.copyWith(
-      players: playersListCopy,
-    ));
-    
-
-    
-  }
+  
 
   void reset() {
     emit(state.copyWith(players: const []));

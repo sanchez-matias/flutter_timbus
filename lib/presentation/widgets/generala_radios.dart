@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_timbus_annotations/domain/entities/generala_player.dart';
 import 'package:flutter_timbus_annotations/presentation/bloc/blocs.dart';
 
 class GeneralaRadios extends StatelessWidget {
@@ -44,19 +45,12 @@ class GeneralaRadios extends StatelessWidget {
         _buildCustomRadioButton(
           label: '0',
           value: 0,
-          groupValue: selectedPlayer.isCellCrossedOut(selectedRow)
-            ? 0
-            : selectedPlayer.scoresList[selectedRow],
+          groupValue: selectedPlayer.isCellCrossedOut(selectedRow) ? -1 : 0,
           onChanged: (p0) async {
-            generalaCubit.changeBoxValue(
+            generalaCubit.changeCellValue(
               playerIndex: playerIndex,
               rowIndex: selectedRow,
-              newValue: 0,
-            );
-
-            generalaCubit.removeCrossOut(
-              playerIndex: playerIndex,
-              rowIndex: playerIndex,
+              newValue: const GeneralaCell(value: 0, isCrossedOut: false),
             );
 
             await Future.delayed(const Duration(milliseconds: 200));
@@ -73,15 +67,11 @@ class GeneralaRadios extends StatelessWidget {
                   value: (index + 1) * (selectedRow + 1),
                   groupValue: selectedPlayer.scoresList[selectedRow],
                   onChanged: (value) async {
-                    generalaCubit.changeBoxValue(
+                    generalaCubit.changeCellValue(
                       playerIndex: playerIndex,
                       rowIndex: selectedRow,
-                      newValue: value!,
-                    );
-
-                    generalaCubit.removeCrossOut(
-                      playerIndex: playerIndex,
-                      rowIndex: playerIndex,
+                      newValue:
+                          GeneralaCell(value: value!, isCrossedOut: false),
                     );
 
                     await Future.delayed(const Duration(milliseconds: 200));
@@ -99,10 +89,10 @@ class GeneralaRadios extends StatelessWidget {
                   groupValue: selectedPlayer.scoresList[selectedRow],
                   onChanged: (value) async {
                     if (!context.mounted) return;
-                    generalaCubit.changeBoxValue(
+                    generalaCubit.changeCellValue(
                       playerIndex: playerIndex,
                       rowIndex: selectedRow,
-                      newValue: value!,
+                      newValue: GeneralaCell(value: value!),
                     );
 
                     await Future.delayed(const Duration(milliseconds: 200));
@@ -114,20 +104,13 @@ class GeneralaRadios extends StatelessWidget {
         // This is the last option in the scores list, which represents the option to cross out a cell.
         _buildCustomRadioButton(
           label: 'X',
-          value: -1,
-          groupValue: selectedPlayer.isCellCrossedOut(selectedRow)
-            ? 0
-            : selectedPlayer.scoresList[selectedRow],
+          value: 0,
+          groupValue: selectedPlayer.isCellCrossedOut(selectedRow) ? 0 : -1,
           onChanged: (p0) async {
-            generalaCubit.changeBoxValue(
+            generalaCubit.changeCellValue(
               playerIndex: playerIndex,
               rowIndex: selectedRow,
-              newValue: 0,
-            );
-
-            generalaCubit.crossOutCell(
-              playerIndex: playerIndex,
-              rowIndex: selectedRow,
+              newValue: const GeneralaCell(value: 0, isCrossedOut: true),
             );
 
             await Future.delayed(const Duration(milliseconds: 200));
