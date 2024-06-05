@@ -5,34 +5,80 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final size = MediaQuery.of(context).size;
+
+    return Scaffold(
         body: SafeArea(
+          bottom: false,
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('TIMBUS', style: TextStyle(fontSize: 30)),
-            _GameOptionButton(
+            const SizedBox(height: 20),
+
+            SizedBox(
+              width: size.width * 0.6,
+              child: const Stack(
+                children: [
+                  Center(
+                    child: Text('Timbus',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 0, 28, 40),
+                          fontSize: 80,
+                          fontFamily: 'DancingScript',
+                          fontWeight: FontWeight.w800,
+                        )),
+                  ),
+
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Image(
+                      width: 40,
+                      height: 40,
+                      image: AssetImage('assets/images/dices.png'),
+                    ),
+                  ),
+
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    child: Image(
+                      width: 40,
+                      height: 40,
+                      image: AssetImage('assets/images/cards.png'),
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+            
+            const SizedBox(height: 50),
+
+            const _GameOptionButton(
               title: 'La Mosca',
               icon: Icons.emoji_nature,
               routeName: 'mosca',
             ),
-            _GameOptionButton(
+            
+            const _GameOptionButton(
               title: 'Truco',
               icon: Icons.crop_square,
               routeName: 'truco',
             ),
-            _GameOptionButton(
+
+            const _GameOptionButton(
               title: 'Generala',
               icon: Icons.casino,
               routeName: 'generala',
             ),
-            _GameOptionButton(
+            const _GameOptionButton(
               title: 'Chinchón',
               icon: Icons.healing_outlined,
               routeName: 'chinchon',
             ),
-            _GameOptionButton(
+            const _GameOptionButton(
               title: 'Ver Reglas',
               icon: Icons.rule,
               routeName: 'rules',
@@ -58,7 +104,7 @@ class _GameOptionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: MaterialButton(
           shape: const StadiumBorder(),
           onPressed: () async {
