@@ -62,9 +62,11 @@ class ChinchonScreen extends StatelessWidget {
               if (name == null || name == '') return;
               chinchonBloc.add(NewPlayer(name));
             },
-            icon: const Icon(Icons.person_add),
+            icon: const Icon(Icons.person_add, color: Colors.white),
           ),
+
           const SizedBox(width: 20),
+
           IconButton(
             onPressed: () async {
               if (chinchonBloc.state.players.isEmpty) return;
@@ -78,9 +80,11 @@ class ChinchonScreen extends StatelessWidget {
               if (!areYouSure) return;
               chinchonBloc.add(RemovePlayer(deletedPlayer));
             },
-            icon: const Icon(Icons.person_remove),
+            icon: const Icon(Icons.person_remove, color: Colors.white),
           ),
+
           const SizedBox(width: 20),
+
           IconButton(
             onPressed: () async {
               if (chinchonBloc.state.histories
@@ -93,8 +97,9 @@ class ChinchonScreen extends StatelessWidget {
               if (!areYouSure) return;
               chinchonBloc.add(CancelPlay());
             },
-            icon: const Icon(Icons.undo),
+            icon: const Icon(Icons.undo, color: Colors.white),
           ),
+
         ],
       )),
       floatingActionButton: FloatingActionButton(
