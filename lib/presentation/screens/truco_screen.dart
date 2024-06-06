@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_timbus_annotations/presentation/bloc/blocs.dart';
+import 'package:flutter_timbus_annotations/presentation/helpers/dialogs.dart';
 import 'package:flutter_timbus_annotations/presentation/widgets/truco_square_drawer.dart';
 
 class TrucoScreen extends StatelessWidget {
@@ -23,6 +24,18 @@ class TrucoScreen extends StatelessWidget {
           ),
         ),
         title: const Text('Truco'),
+        actions: [
+          IconButton(
+            tooltip: 'Eliminar Jugada',
+            onPressed: () async {
+              final areYouSure = await showAreYouSureDialog(context);
+              if (!areYouSure) return;
+
+              trucoCubit.resetGame();
+            },
+            icon: const Icon(Icons.delete, color: Colors.white),
+          ),
+        ],
       ),
       body: BlocBuilder(
         bloc: trucoCubit,
@@ -70,51 +83,41 @@ class TrucoScreen extends StatelessWidget {
             title,
             style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w800),
           ),
-
           const Divider(),
           const Spacer(),
-
           TrucoSquareDrawer(
             size: size,
             globalScore: score,
             relativeMaxScore: 5,
           ),
-
           TrucoSquareDrawer(
             size: size,
             globalScore: score,
             relativeMaxScore: 10,
           ),
-
           TrucoSquareDrawer(
             size: size,
             globalScore: score,
             relativeMaxScore: 15,
           ),
-
           const Divider(),
-
           TrucoSquareDrawer(
             size: size,
             globalScore: score,
             relativeMaxScore: 20,
           ),
-
           TrucoSquareDrawer(
             size: size,
             globalScore: score,
             relativeMaxScore: 25,
           ),
-
           TrucoSquareDrawer(
             size: size,
             globalScore: score,
             relativeMaxScore: 30,
           ),
-
           const Spacer(),
           const Divider(),
-
           Text(
             score.toString(),
             style: TextStyle(

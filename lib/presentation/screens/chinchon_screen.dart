@@ -24,6 +24,18 @@ class ChinchonScreen extends StatelessWidget {
           ),
         ),
         title: const Text('Chinchón'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              if (chinchonBloc.state.players.isEmpty) return;
+              final areYouSure = await showAreYouSureDialog(context);
+              if (!areYouSure) return;
+
+              chinchonBloc.add(Reset());
+            },
+            icon: const Icon(Icons.delete, color: Colors.white),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 30, bottom: 30, left: 20),
@@ -64,9 +76,7 @@ class ChinchonScreen extends StatelessWidget {
             },
             icon: const Icon(Icons.person_add, color: Colors.white),
           ),
-
           const SizedBox(width: 20),
-
           IconButton(
             onPressed: () async {
               if (chinchonBloc.state.players.isEmpty) return;
@@ -75,16 +85,14 @@ class ChinchonScreen extends StatelessWidget {
               if (deletedPlayer == null) return;
 
               if (!context.mounted) return;
-              final areYouSure = await showAreYouSureToDeleteDialog(context);
+              final areYouSure = await showAreYouSureDialog(context);
 
               if (!areYouSure) return;
               chinchonBloc.add(RemovePlayer(deletedPlayer));
             },
             icon: const Icon(Icons.person_remove, color: Colors.white),
           ),
-
           const SizedBox(width: 20),
-
           IconButton(
             onPressed: () async {
               if (chinchonBloc.state.histories
@@ -99,7 +107,6 @@ class ChinchonScreen extends StatelessWidget {
             },
             icon: const Icon(Icons.undo, color: Colors.white),
           ),
-
         ],
       )),
       floatingActionButton: FloatingActionButton(

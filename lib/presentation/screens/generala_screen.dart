@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_timbus_annotations/presentation/bloc/blocs.dart';
+import 'package:flutter_timbus_annotations/presentation/helpers/dialogs.dart';
 import 'package:flutter_timbus_annotations/presentation/widgets/generala_player_loader.dart';
 import 'package:flutter_timbus_annotations/presentation/widgets/generala_radios.dart';
 
@@ -9,6 +10,8 @@ class GeneralaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final generalaCubit = BlocProvider.of<GeneralaCubit>(context);
+
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -23,8 +26,12 @@ class GeneralaScreen extends StatelessWidget {
           actions: [
             IconButton(
               tooltip: 'Reiniciar',
-              onPressed: () {
-                context.read<GeneralaCubit>().reset();
+              onPressed: () async {
+                if (generalaCubit.state.players.isEmpty) return;
+                final areYouSure = await showAreYouSureDialog(context);
+                if (!areYouSure) return;
+
+                generalaCubit.reset();
               },
               icon: const Icon(
                 Icons.delete,

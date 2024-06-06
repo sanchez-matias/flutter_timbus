@@ -27,3 +27,5 @@ class RemovePlayer extends ChinchonEvent {
 }
 
 class CancelPlay extends ChinchonEvent {}
+
+class Reset extends ChinchonEvent {}

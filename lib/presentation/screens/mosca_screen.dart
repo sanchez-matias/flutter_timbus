@@ -24,6 +24,18 @@ class MoscaScreen extends StatelessWidget {
           ),
         ),
         title: const Text('La Mosca'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              if (moscaBloc.state.players.isEmpty) return;
+              final areYouSure = await showAreYouSureDialog(context);
+              if (!areYouSure) return;
+
+              moscaBloc.add(ResetGame());
+            },
+            icon: const Icon(Icons.delete,color: Colors.white),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 30, bottom: 30, left: 20),
@@ -98,7 +110,7 @@ class MoscaScreen extends StatelessWidget {
                 if (deletedPlayer == null) return;
 
                 if (!context.mounted) return;
-                final areYouSure = await showAreYouSureToDeleteDialog(context);
+                final areYouSure = await showAreYouSureDialog(context);
 
                 if (!areYouSure) return;
                 moscaBloc.add(DeletePlayer(deletedPlayer));

@@ -15,6 +15,7 @@ class ChinchonBloc extends Bloc<ChinchonEvent, ChinchonState> {
     on<NewPlayer>(_onAddPlayerHandler);
     on<RemovePlayer>(_onDeletePlayerHandler);
     on<CancelPlay>(_onUndoPlayHandler);
+    on<Reset>(_onResetHandler);
   }
 
   bool registerNewScoreTrigger(Map<String, int> scores) {
@@ -110,5 +111,9 @@ class ChinchonBloc extends Bloc<ChinchonEvent, ChinchonState> {
     }
 
     emit(state.copyWith(players: newPlayersList));
+  }
+
+  void _onResetHandler(Reset event, Emitter<ChinchonState> emit) {
+    emit(state.copyWith(players: []));
   }
 }

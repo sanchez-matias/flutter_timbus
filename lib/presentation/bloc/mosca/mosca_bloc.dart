@@ -16,6 +16,8 @@ class MoscaBloc extends Bloc<MoscaEvent, MoscaState> {
     on<DeletePlayer>(_onDeletePlayerHandler);
 
     on<UndoPlay>(_onUndoPlayHandler);
+
+    on<ResetGame>(_onResetHandler);
   }
 
   bool registerNewScoreTrigger(Map<String, int> scores) {
@@ -92,5 +94,9 @@ class MoscaBloc extends Bloc<MoscaEvent, MoscaState> {
     }
 
     emit(state.copyWith(players: newPlayersList));
+  }
+
+  void _onResetHandler(ResetGame event, Emitter<MoscaState> emit) {
+    emit(state.copyWith(players: []));
   }
 }

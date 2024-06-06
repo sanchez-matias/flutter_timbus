@@ -79,10 +79,9 @@ Future<void> chinchonNewRoundDialog(
     builder: (context) => AlertDialog(
       title: const Text('Anota una nueva ronda'),
       content: SizedBox(
-        width: 400.0,
-        height: 30 + (60 * names.length).toDouble(),
-        child: NumericInputMenu(names: names)
-      ),
+          width: 400.0,
+          height: 30 + (60 * names.length).toDouble(),
+          child: NumericInputMenu(names: names)),
       actions: [
         ElevatedButton.icon(
             onPressed: () {
@@ -156,15 +155,13 @@ Future<String?> showDeletePlayerDialog(
   return deletedPlayer;
 }
 
-Future<bool> showAreYouSureToDeleteDialog(BuildContext context) async {
+Future<bool> showAreYouSureDialog(BuildContext context) async {
   bool sure = false;
 
   await showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('¿Estás seguro?'),
-      content: const Text(
-          'Una vez eliminado no vas a poder recuperar al jugador. Solo podrás crear uno nuevo que entra colado.'),
+      title: const Text('¿Estás seguro de realizar esta acción?'),
       actions: [
         OutlinedButton.icon(
             onPressed: () {
