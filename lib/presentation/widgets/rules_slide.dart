@@ -20,6 +20,8 @@ class Slide extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 40),
+
             title != null
                 ? Text(title!,
                     style: const TextStyle(

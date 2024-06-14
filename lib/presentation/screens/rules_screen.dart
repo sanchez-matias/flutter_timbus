@@ -52,34 +52,37 @@ class RulesScreen extends StatelessWidget {
               )),
           title: const Text('Reglas de Juegos'),
         ),
-        body: ListView.separated(
-          itemBuilder: (context, index) {
-            final item = _items[index];
-
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: MaterialButton(
-                padding: const EdgeInsets.all(15),
-                shape: const StadiumBorder(),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(item.iconData),
-                    const SizedBox(width: 20),
-                    Text(
-                      item.title,
-                      style: const TextStyle(fontSize: 25),
-                    ),
-                  ],
+        body: Center(
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final item = _items[index];
+          
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: MaterialButton(
+                  padding: const EdgeInsets.all(15),
+                  shape: const StadiumBorder(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(item.iconData),
+                      const SizedBox(width: 20),
+                      Text(
+                        item.title,
+                        style: const TextStyle(fontSize: 25),
+                      ),
+                    ],
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, item.route);
+                  },
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, item.route);
-                },
-              ),
-            );
-          },
-          separatorBuilder: (context, index) => const SizedBox(height: 20),
-          itemCount: _items.length,
+              );
+            },
+            separatorBuilder: (context, index) => const SizedBox(height: 20),
+            itemCount: _items.length,
+          ),
         ));
   }
 }
