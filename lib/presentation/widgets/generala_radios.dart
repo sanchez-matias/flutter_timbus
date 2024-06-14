@@ -45,7 +45,10 @@ class GeneralaRadios extends StatelessWidget {
         _buildCustomRadioButton(
           label: '0',
           value: 0,
-          groupValue: selectedPlayer.isCellCrossedOut(selectedRow) ? -1 : 0,
+          groupValue: selectedPlayer.isCellCrossedOut(selectedRow) ||
+                  selectedPlayer.scoresList[selectedRow] != 0
+              ? -1
+              : 0,
           onChanged: (p0) async {
             generalaCubit.changeCellValue(
               playerIndex: playerIndex,

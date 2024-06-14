@@ -17,16 +17,16 @@ class BlocProviders extends StatelessWidget {
           create: (context) => NewScoreCubit(),
         ),
         BlocProvider(
-          create: (context) => MoscaBloc(),
+          create: (context) => MoscaBloc()..add(InitMosca()),
         ),
         BlocProvider(
           create: (context) => TrucoCubit(),
         ),
         BlocProvider(
-          create: (context) => GeneralaCubit(),
+          create: (context) => GeneralaCubit()..init(),
         ),
         BlocProvider(
-          create: (context) => ChinchonBloc(),
+          create: (context) => ChinchonBloc()..add(InitChinchon()),
         ),
       ],
       child: const MyApp(),

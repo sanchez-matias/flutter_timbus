@@ -28,3 +28,5 @@ class DeletePlayer extends MoscaEvent {
 class UndoPlay extends MoscaEvent {}
 
 class ResetGame extends MoscaEvent {}
+
+class InitMosca extends MoscaEvent {}

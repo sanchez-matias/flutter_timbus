@@ -1,4 +1,11 @@
+import 'package:isar/isar.dart';
+
+part 'chinchon_player.g.dart';
+
+@collection
 class ChinchonPlayer {
+  Id id = Isar.autoIncrement;
+
   final String name;
   final int currentScore;
   final List<int> scoreHistory;

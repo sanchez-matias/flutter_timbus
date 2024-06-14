@@ -1,3 +1,8 @@
+import 'package:isar/isar.dart';
+
+part 'generala_player.g.dart';
+
+@embedded
 class GeneralaCell {
   final int value;
   final bool isCrossedOut;
@@ -8,7 +13,10 @@ class GeneralaCell {
   });
 }
 
+@collection
 class GeneralaPlayer {
+  Id id = Isar.autoIncrement;
+
   final String name;
   final GeneralaCell oneRow;
   final GeneralaCell twoRow;
@@ -50,6 +58,7 @@ class GeneralaPlayer {
       generala.value +
       double.value;
 
+  @ignore
   Map<String, GeneralaCell> get scoresMap => {
         '1': oneRow,
         '2': twoRow,
@@ -63,6 +72,7 @@ class GeneralaPlayer {
         'double': double,
       };
 
+  @ignore
   List<int> get scoresList => scoresMap.values.map((cell) => cell.value).toList();
 
   bool isCellCrossedOut(int rowIndex) {
