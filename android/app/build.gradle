@@ -29,7 +29,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.sanchezmatias.timbus"
+    namespace "com.example.flutter_timbus_annotations"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
