@@ -68,6 +68,7 @@ class GeneralaPlayer {
         '6': sixRow,
         'straight': straight,
         'full': full,
+        'poker': poker,
         'generala': generala,
         'double': double,
       };

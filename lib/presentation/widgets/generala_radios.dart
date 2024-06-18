@@ -25,9 +25,11 @@ class GeneralaRadios extends StatelessWidget {
       case 7:
         return 30;
       case 8:
-        return 50;
+        return 40;
       case 9:
-        return 100;
+        return 50;
+      case 10:
+       return 100;
       default:
         return 0;
     }

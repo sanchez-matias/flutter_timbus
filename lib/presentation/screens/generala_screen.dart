@@ -60,6 +60,7 @@ class GeneralaScreen extends StatelessWidget {
       '6',
       'Escalera',
       'Full',
+      'Poker',
       'Generala',
       'Doble',
     ];
@@ -89,7 +90,7 @@ class GeneralaScreen extends StatelessWidget {
 
           // Scores Rows
           ...List.generate(
-            10,
+            11,
             (rowIndex) => TableRow(children: [
               Text(
                 scoreNameRow[rowIndex],
@@ -123,6 +124,10 @@ class GeneralaScreen extends StatelessWidget {
                           child: Text(
                             state.globalScores[index],
                             textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ))
               ]),
@@ -161,7 +166,7 @@ class TableCell extends StatelessWidget {
     final player = generalaCubit.state.players[selectedPlayer];
 
     return Padding(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(3),
       child: Container(
         decoration: BoxDecoration(
           color: player.isCellCrossedOut(selectedRow)
@@ -185,7 +190,7 @@ class TableCell extends StatelessWidget {
                   ? 'X'
                   : player.scoresList[selectedRow].toString(),
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 15),
             ),
           ),
         ),
