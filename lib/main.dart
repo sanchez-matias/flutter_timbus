@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
         'generala': (context) => const GeneralaScreen(),
         'chinchon': (context) => const ChinchonScreen(),
         'rules': (context) => const RulesScreen(),
+        'settings': (_) => const SettingsScreen(),
         'mosca_rules':(context) => const MoscaRulesScreen(),
         'truco_rules':(context) => const TrucoRulesScreen(),
         'generala_rules':(context) => const GeneralaRulesScreen(),

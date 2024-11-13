@@ -8,3 +8,4 @@ export 'rules/mosca_rules_screen.dart';
 export 'rules/truco_rules_screen.dart';
 export 'rules/generala_rules_screen.dart';
 export 'rules/chinchon_rules.dart';
+export 'settings_screen.dart';

@@ -22,7 +22,7 @@ class AppTheme {
             const BottomAppBarTheme(color: Color.fromARGB(230, 0, 28, 40)),
         iconButtonTheme: const IconButtonThemeData(
             style: ButtonStyle(
-          iconSize: MaterialStatePropertyAll(30),
+          iconSize: WidgetStatePropertyAll(30),
         )),
         // TODO: dialogTheme: const DialogTheme(),
       );
