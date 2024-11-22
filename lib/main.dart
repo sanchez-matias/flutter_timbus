@@ -26,7 +26,7 @@ class BlocProviders extends StatelessWidget {
           create: (context) => GeneralaCubit()..init(),
         ),
         BlocProvider(
-          create: (context) => ChinchonBloc()..add(InitChinchon()),
+          create: (context) => ChinchonCubit(),
         ),
       ],
       child: const MyApp(),

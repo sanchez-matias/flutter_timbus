@@ -11,6 +11,7 @@ class ChinchonPlayer {
   final List<int> scoreHistory;
 
   ChinchonPlayer({
+    this.id = Isar.autoIncrement,
     this.name = 'player',
     this.currentScore = 0,
     this.scoreHistory = const [],
@@ -26,6 +27,7 @@ class ChinchonPlayer {
     List<int>? scoreHistory,
   }) =>
       ChinchonPlayer(
+        id: id,
         name: name ?? this.name,
         currentScore: currentScore ?? this.currentScore,
         scoreHistory: scoreHistory ?? this.scoreHistory,

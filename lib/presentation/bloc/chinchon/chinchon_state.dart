@@ -1,46 +1,46 @@
-part of 'chinchon_bloc.dart';
-
-enum ScoreLimit {upTo50, upTo100}
+part of 'chinchon_cubit.dart';
 
 class ChinchonState extends Equatable {
   final List<ChinchonPlayer> players;
-  final ScoreLimit limit;
-
+  final int limit;
+  final String message;
 
   const ChinchonState({
     this.players = const [],
-    this.limit = ScoreLimit.upTo100,
+    this.limit = 50,
+    this.message = '',
   });
+
+  bool get areAllZero => !players.any((player) => player.currentScore != 0);
 
   List<String> get names => players.map((player) => player.name).toList();
 
-  List<int> get currentScores =>
-      players.map((player) => player.currentScore).toList();
+  List<int> get ids => players.map((player) => player.id).toList();
 
-  List<List<int>> get histories =>
-      players.map((player) => player.scoreHistory).toList();
-
-  int get higherScore => currentScores.reduce(max);
-
-  List<ChinchonPlayer> get eliminatedPlayers {
-    if (limit == ScoreLimit.upTo100) {
-      return players.where((player) => player.isPlayerAbove100).toList();
-    } else {
-      return players.where((player) => player.isPlayerAbove50).toList();
+  int get higestPlayingScore {
+    final playingScores = players.where((player) => player.currentScore < limit);
+    
+    try {
+      return playingScores.map((e) => e.currentScore).reduce(max);
+    } catch (e) {
+      return 0;
     }
   }
 
-  List<String> get eliminatedPlayersNames => eliminatedPlayers.map((player) => player.name).toList();
+  int get lowerScore => players.map((e) => e.currentScore).reduce(min);
 
   ChinchonState copyWith({
     List<ChinchonPlayer>? players,
-    ScoreLimit? limit,
+    int? limit,
+    String? message,
   }) =>
       ChinchonState(
         players: players ?? this.players,
         limit: limit ?? this.limit,
+        message: message ?? this.message,
       );
 
   @override
-  List<Object> get props => [names, currentScores, limit];
+  List<Object> get props => [players, limit, message];
 }
+
