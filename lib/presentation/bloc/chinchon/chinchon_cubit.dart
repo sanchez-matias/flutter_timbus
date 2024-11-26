@@ -2,23 +2,21 @@ import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-
-import 'package:flutter_timbus_annotations/data/datasources/chinchon_storage_datasource.dart';
-import 'package:flutter_timbus_annotations/data/repositories/chinchon_storage_repository_impl.dart';
+import 'package:flutter_timbus_annotations/data/datasources/storage_datasource.dart';
+import 'package:flutter_timbus_annotations/data/repositories/storage_repository_impl.dart';
 import 'package:flutter_timbus_annotations/domain/entities/chinchon_player.dart';
 
 part 'chinchon_state.dart';
 
 class ChinchonCubit extends Cubit<ChinchonState> {
-  final _repository =
-      ChinchonStorageRepositoryImpl(ChinchonStorageDatasourceImpl());
+  final _repository = StorageRepositoryImpl(StorageDatasourceImpl());
 
   ChinchonCubit() : super(const ChinchonState()) {
     _getPlayersFromDb();
   }
 
   Future<void> _getPlayersFromDb() async {
-    final players = await _repository.getPlayers();
+    final players = await _repository.getChinchonPlayers();
 
     emit(state.copyWith(
       players: players,
@@ -39,12 +37,12 @@ class ChinchonCubit extends Cubit<ChinchonState> {
   }
 
   Future<void> deleteMatch() async {
-    await _repository.resetMatch();
+    await _repository.resetChinchonMatch();
     _getPlayersFromDb();
   }
 
   Future<void> deletePlayer(int id) async {
-    await _repository.deletePlayer(id);
+    await _repository.deleteChinchonPlayer(id);
     _getPlayersFromDb();
   }
 
@@ -58,12 +56,12 @@ class ChinchonCubit extends Cubit<ChinchonState> {
     // The players who join a started game, must join with the highest score
     // of non-eliminated players.
     if (state.players.isEmpty) {
-      await _repository.addPlayer(ChinchonPlayer(name: name.toUpperCase()));
+      await _repository.updateChinchonPlayers([ChinchonPlayer(name: name.toUpperCase())]);
     } else {
-      await _repository.addPlayer(ChinchonPlayer(
+      await _repository.updateChinchonPlayers([ChinchonPlayer(
         name: name.toUpperCase(),
         currentScore: state.higestPlayingScore,
-      ));
+      )]);
     }
 
     _getPlayersFromDb();
@@ -75,23 +73,26 @@ class ChinchonCubit extends Cubit<ChinchonState> {
       return;
     }
 
-    if (roundScores.length != state.players.length) {
-      emitMessage('Deben cargarse los ${state.players.length} puntajes juntos');
-      return;
-    }
+    // if (roundScores.length != state.players.length) {
+    //   emitMessage('Deben cargarse los ${state.players.length} puntajes juntos');
+    //   return;
+    // }
 
     final newScores = <ChinchonPlayer>[];
 
     for (final player in state.players) {
       final roundScore = roundScores[player.name];
 
-      newScores.add(player.copyWith(
-        scoreHistory: [player.currentScore, ...player.scoreHistory],
-        currentScore: player.currentScore + roundScore!,
-      ));
+      // If there are eliminated players, they will be skipped here.
+      if (roundScore != null) {
+        newScores.add(player.copyWith(
+          scoreHistory: [player.currentScore, ...player.scoreHistory],
+          currentScore: player.currentScore + roundScore,
+        ));
+      }
     }
 
-    await _repository.updatePlayersScore(newScores);
+    await _repository.updateChinchonPlayers(newScores);
     _getPlayersFromDb();
   }
 
@@ -122,7 +123,7 @@ class ChinchonCubit extends Cubit<ChinchonState> {
         ));
       }
 
-      await _repository.updatePlayersScore(newPlayersList);
+      await _repository.updateChinchonPlayers(newPlayersList);
       _getPlayersFromDb();
     }
   }
@@ -139,7 +140,7 @@ class ChinchonCubit extends Cubit<ChinchonState> {
       );
     }
 
-    await _repository.updatePlayersScore(players);
+    await _repository.updateChinchonPlayers(players);
     _getPlayersFromDb();
   }
 }

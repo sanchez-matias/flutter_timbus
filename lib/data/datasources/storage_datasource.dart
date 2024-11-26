@@ -80,7 +80,7 @@ class StorageDatasourceImpl implements StorageDatasource {
   @override
   Future<void> deleteChinchonPlayer(int id) async {
     final isar = await db;
-    isar.writeTxn(() => isar.chinchonPlayers.delete(id));
+    await isar.writeTxn(() => isar.chinchonPlayers.delete(id));
   }
 
   @override
@@ -92,15 +92,13 @@ class StorageDatasourceImpl implements StorageDatasource {
   @override
   Future<void> resetChinchonMatch() async {
     final isar = await db;
-    isar.writeTxn(() => isar.chinchonPlayers.clear());
+    await isar.writeTxn(() => isar.chinchonPlayers.clear());
   }
 
   @override
   Future<void> updateChinchonPlayers(List<ChinchonPlayer> players) async {
-    await resetChinchonMatch();
     final isar = await db;
-
-    isar.writeTxn(() => isar.chinchonPlayers.putAll(players));
+    await isar.writeTxn(() => isar.chinchonPlayers.putAll(players));
   }
 
   //* GENERALA

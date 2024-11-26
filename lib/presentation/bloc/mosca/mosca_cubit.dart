@@ -93,10 +93,13 @@ class MoscaCubit extends Cubit<MoscaState> {
     for (final player in state.players) {
       final roundScore = roundScores[player.name];
 
-      newScores.add(player.copyWith(
-        scoreHistory: [player.currentScore, ...player.scoreHistory],
-        currentScore: player.currentScore + roundScore!,
-      ));
+      // If there are eliminated players, they will be skipped here.
+      if (roundScore != null) {
+        newScores.add(player.copyWith(
+          scoreHistory: [player.currentScore, ...player.scoreHistory],
+          currentScore: player.currentScore + roundScore,
+        ));
+      }
     }
 
     await _repository.updateMoscaPlayers(newScores);
