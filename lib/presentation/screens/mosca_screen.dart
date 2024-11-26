@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timbus_annotations/presentation/bloc/mosca/mosca_bloc.dart';
-import 'package:flutter_timbus_annotations/presentation/bloc/new_score/new_score_cubit.dart';
-import 'package:flutter_timbus_annotations/presentation/helpers/dialogs.dart';
+import 'package:flutter_timbus_annotations/presentation/bloc/mosca/mosca_cubit.dart';
+import 'package:flutter_timbus_annotations/presentation/helpers/helpers.dart';
+import 'package:flutter_timbus_annotations/presentation/widgets/widgets.dart';
 
 class MoscaScreen extends StatelessWidget {
   const MoscaScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final moscaBloc = BlocProvider.of<MoscaBloc>(context);
-    final newScoreCubit = BlocProvider.of<NewScoreCubit>(context);
+    final moscaBloc = context.watch<MoscaCubit>();
+
+    final activePlayers = moscaBloc.state.players
+        .where((player) => player.currentScore > 0)
+        .map((player) => player.name)
+        .toList();
+
+    final menuController = MenuController();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
@@ -25,166 +32,311 @@ class MoscaScreen extends StatelessWidget {
         ),
         title: const Text('La Mosca'),
         actions: [
-          IconButton(
-            onPressed: () async {
-              if (moscaBloc.state.players.isEmpty) return;
-              final areYouSure = await showAreYouSureDialog(context);
-              if (!areYouSure) return;
-
-              moscaBloc.add(ResetGame());
-            },
-            icon: const Icon(Icons.delete,color: Colors.white),
+          _GameOptionsMenu(
+            controller: menuController,
+            child: IconButton(
+              onPressed: () => menuController.open(),
+              icon: const Icon(Icons.more_vert, color: Colors.white),
+            ),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 30, bottom: 30, left: 20),
-        child: BlocBuilder<MoscaBloc, MoscaState>(
-          builder: (context, state) {
-            if (state.players.isEmpty) {
-              return const Center(
-                child: Text('No hay jugadores ni puntajes registrados'),
-              );
-            }
 
-            return _buildScores(
-              state: state,
-              histories: moscaBloc.state.histories,
-              names: state.names.map((name) {
-                if (name.length > 4) {
-                  return name.substring(0, 4);
-                } else {
-                  return name;
-                }
-              }).toList(),
-              points: state.currentScores,
-            );
-          },
-        ),
-      ),
+      body: const _PlayersView(),
+
       floatingActionButton: FloatingActionButton(
         tooltip: 'Anotar nueva jugada',
-        onPressed: () async {
-          if (!context.mounted) return;
-
-          if ( moscaBloc.state.players.isEmpty) return;
-          await showNewRoundDialog(context, moscaBloc.state.names);
-          final isValid = moscaBloc.registerNewScoreTrigger(newScoreCubit.state);
-          if (!isValid){
-            // ignore: use_build_context_synchronously
-            await showBadInputDialog(context);
-          }
-          newScoreCubit.resetState();
-        },
+        onPressed: activePlayers.isEmpty
+          ? null
+          : () => showDialog(
+            barrierDismissible: false,
+            context: context,
+                  builder: (context) => _ChoicePopUpMenu(
+                    names: activePlayers,
+                  ),
+                ),
         child: const Icon(Icons.add),
       ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
 
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: () async {
-                if (!context.mounted) return;
+      bottomNavigationBar: const _BottomAppBar(),
+    );
+  }
+}
 
-                final name = await showNewPlayerDialog(context);
-                if (name == null || name == '') return;
-                moscaBloc.add(AddPlayer(name));
-              },
-              icon: const Icon(
-                Icons.person_add,
-                color: Colors.white,
-              ),
-              tooltip: 'Agregar jugador',
-            ),
+class _PlayersView extends StatelessWidget {
+  const _PlayersView();
 
-            const SizedBox(width: 20),
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<MoscaCubit>().state;
 
-            IconButton(
-              onPressed: () async {
-                if (moscaBloc.state.players.isEmpty) return;
-
-                if (!context.mounted) return;
-                final deletedPlayer = await showDeletePlayerDialog(context, moscaBloc.state.names);
-                if (deletedPlayer == null) return;
-
-                if (!context.mounted) return;
-                final areYouSure = await showAreYouSureDialog(context);
-
-                if (!areYouSure) return;
-                moscaBloc.add(DeletePlayer(deletedPlayer));
-              },
-              icon: const Icon(
-                Icons.person_remove,
-                color: Colors.white,
-              ),
-              tooltip: 'Eliminar jugador',
-            ),
-
-            const SizedBox(width: 20),
-
-            IconButton(
-              onPressed: () async {
-                if (moscaBloc.state.histories.where((aScoreHistory) => aScoreHistory.isNotEmpty).isEmpty) return;
-
-                if (!context.mounted) return;
-                final areYouSure = await showAreYouSureToUndoDialog(context);
-
-                if (!areYouSure) return;
-                moscaBloc.add(UndoPlay());
-              },
-              icon: const Icon(
-                Icons.undo,
-                color: Colors.white,
-              ),
-              tooltip: 'Deshacer última jugada',
-            ),
-          ],
-        ),
+    if (state.players.isEmpty) {
+      return const Center(
+        child: Text('No hay jugadores cargados'),
+      );
+    }
+ 
+    return Center(
+      child: ListView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        itemCount: state.players.length,
+        itemBuilder: (context, index) {
+          final player = state.players[index];
+      
+          return ScoreColumn(
+            name: player.name,
+            currentScore: player.currentScore,
+            scoreHistory: player.scoreHistory,
+            isPlayerEliminated: player.currentScore <= 0,
+          );
+        },
       ),
     );
   }
+}
 
-  ListView _buildScores({
-    required MoscaState state,
-    required List<String> names,
-    required List<int> points,
-    required List<List<int>> histories,
-  }) {
-    return ListView.separated(
-      scrollDirection: Axis.horizontal,
-      itemCount: state.numberOfPlayers,
-      itemBuilder: (context, index) {
-        final playerHistory =
-            histories[index].isEmpty ? ['...'] : histories[index];
+class _BottomAppBar extends StatelessWidget {
+  const _BottomAppBar();
 
-        return Column(
-          children: [
-            // Player Name
-            Text(
-              names[index],
-              style: const TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 25,
+  @override
+  Widget build(BuildContext context) {
+    final moscaBloc = context.watch<MoscaCubit>();
+    final isStateEmpty = moscaBloc.state.players.isEmpty;
+
+    return BottomAppBar(
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => NewPlayerDialog(
+                callback: context.read<MoscaCubit>().addPlayer,
               ),
             ),
-
-            // Player current score
-            Text(
-              points[index].toString(),
-              style: const TextStyle(
-                  fontSize: 23, color: Colors.red, fontWeight: FontWeight.bold),
+            icon: const Icon(
+              Icons.person_add,
+              color: Colors.white,
             ),
+            tooltip: 'Agregar jugador',
+          ),
+    
+          const SizedBox(width: 20),
+    
+          IconButton(
+            onPressed: isStateEmpty
+              ? null
+              : () => showDialog(
+                  context: context,
+                  builder: (context) => DeletePlayersDialog(
+                    players: moscaBloc.state.players,
+                    callback: context.read<MoscaCubit>().deletePlayer,
+                  ),
+              ),
+            icon: const Icon(
+              Icons.person_remove,
+              color: Colors.white,
+            ),
+            tooltip: 'Eliminar jugador',
+          ),
+    
+          const SizedBox(width: 20),
 
-            // Player history of score
-            ...List.generate(playerHistory.length,
-                (historyIndex) => Text(playerHistory[historyIndex].toString())),
-          ],
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) =>
-          const VerticalDivider(),
+          IconButton(
+            onPressed: isStateEmpty
+                ? null
+                : () => showDialog(
+                      context: context,
+                      builder: (context) => AreYouSureDialog(
+                        callback: context.read<MoscaCubit>().undoRound,
+                      ),
+                    ),
+            icon: const Icon(
+              Icons.undo,
+              color: Colors.white,
+            ),
+            tooltip: 'Deshacer última jugada',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ChoicePopUpMenu extends StatefulWidget {
+  final List<String> names;
+
+  const _ChoicePopUpMenu({required this.names});
+
+  @override
+  State<_ChoicePopUpMenu> createState() => _ChoicePopUpMenuState();
+}
+
+class _ChoicePopUpMenuState extends State<_ChoicePopUpMenu> {
+  final List<int> possibleScores = [5, 1, 0, -1, -2, -3, -4, -5];
+
+  Map<String, int> roundsScores = {};
+  String selectedPlayer = '';
+
+  @override
+  void initState() {
+    for (final name in widget.names) {
+      roundsScores[name] = 0;
+    }
+
+    super.initState();
+  }
+
+  int scoresSum(List<int> scores) {
+    if (scores.isEmpty) return 0;
+
+    var counter = 0; 
+    for (var score in scores) {
+      counter = counter + score;
+    }
+    return counter;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Every round must sum -5 between all the players who won at least 1 round.
+    final isInputValid = -5 == scoresSum(
+      roundsScores.values.where((score) => score < 0).toList(),
+    );
+
+    final size = MediaQuery.sizeOf(context);
+
+    return AlertDialog(
+      title: const Text('Nueva ronda'),
+      content: MenuAnchor(
+        menuChildren: List.generate(
+          possibleScores.length,
+          (index) => MenuItemButton(
+            child: Text(
+              possibleScores[index].toString(),
+              style: const TextStyle(fontSize: 18),
+            ),
+            onPressed: () {
+              if (selectedPlayer == '') return;
+              final selectedScore = possibleScores[index];
+
+              setState(() {
+                roundsScores[selectedPlayer] = selectedScore;
+              });
+            },
+          ),
+        ),
+        builder: (context, controller, child) {
+          return SizedBox(
+            height: 50 + (50 * widget.names.length).toDouble(),
+            width: size.width * 0.7,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.names.length,
+              itemBuilder: (context, index) {
+                  final name = widget.names[index];
+                  
+                  return ListTile(
+                    title: Text(
+                      name,
+                      style: const TextStyle(fontWeight: FontWeight.w900),
+                    ),
+                    trailing: Text(
+                      roundsScores[name].toString(),
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        selectedPlayer = name;
+                      });
+                      controller.open(position: Offset.fromDirection(0));
+                    },
+                );
+              },
+            ),
+          );
+        },
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Cancelar'),
+        ),
+
+        FilledButton.icon(
+          onPressed: !isInputValid
+            ? null
+            : () {
+              context.read<MoscaCubit>()
+                .registerNewRound(roundsScores);
+
+              Navigator.pop(context);
+            },
+          label: const Text('Aceptar'),
+          icon: const Icon(Icons.done),
+        ),
+      ],
+    );
+  }
+}
+
+class _GameOptionsMenu extends StatelessWidget {
+  final Widget child;
+  final MenuController controller;
+
+  const _GameOptionsMenu({
+    required this.child,
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final moscaBloc = context.watch<MoscaCubit>();
+    final isStateEmpty = moscaBloc.state.players.isEmpty;
+
+    return MenuAnchor(
+      controller: controller,
+      menuChildren: [
+
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.list_alt),
+          child: const Text('Ver reglas del juego'),
+          onPressed: () {
+            Navigator.pushNamed(context, 'mosca_rules');
+          },
+        ),
+
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.change_circle_outlined),
+          onPressed: isStateEmpty
+              ? null
+              : () => showDialog(
+                  context: context,
+                  builder: (context) => AreYouSureDialog(
+                    callback: context.read<MoscaCubit>().restartGame,
+                  ),
+                ),
+          child: const Text('Volver a Empezar'),
+        ),
+
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.delete),
+          onPressed: isStateEmpty
+              ? null
+              : () => showDialog(
+                  context: context,
+                  builder: (context) => AreYouSureDialog(
+                    callback: context.read<MoscaCubit>().resetGame,
+                  ),
+                ),
+          child: const Text('Descartar partida'),
+        ),
+      ],
+      child: child,
     );
   }
 }

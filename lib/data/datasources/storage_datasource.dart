@@ -54,10 +54,8 @@ class StorageDatasourceImpl implements StorageDatasource {
   //* MOSCA
   @override
   Future<void> updateMoscaPlayers(List<MoscaPlayer> players) async {
-    await resetMoscaMatch();
     final isar = await db;
-
-    isar.writeTxn(() => isar.moscaPlayers.putAll(players));
+    await isar.writeTxn(() => isar.moscaPlayers.putAll(players));
   }
 
   @override
@@ -69,13 +67,13 @@ class StorageDatasourceImpl implements StorageDatasource {
   @override
   Future<void> resetMoscaMatch() async {
     final isar = await db;
-    isar.writeTxn(() => isar.moscaPlayers.clear());
+     await isar.writeTxn(() => isar.moscaPlayers.clear());
   }
 
   @override
   Future<void> deleteMoscaPlayer(int id) async {
     final isar = await db;
-    isar.writeTxn(() => isar.moscaPlayers.delete(id));
+    await isar.writeTxn(() => isar.moscaPlayers.delete(id));
   }
 
   //* CHINCHON

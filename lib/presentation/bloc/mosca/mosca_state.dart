@@ -1,32 +1,35 @@
-part of 'mosca_bloc.dart';
+part of 'mosca_cubit.dart';
 
 class MoscaState extends Equatable {
   final List<MoscaPlayer> players;
+  final String message;
 
   const MoscaState({
     this.players = const [],
+    this.message = '',
   });
 
-  List<String> get names => players.map((player) => player.name).toList();
+  List<String> get names => players.map((e) => e.name).toList();
 
-  List<int> get currentScores =>
-      players.map((player) => player.currentScore).toList();
-
-  List<List<int>> get histories =>
-      players.map((player) => player.scoreHistory).toList();
-
-  int get numberOfPlayers => players.length;
-
-  int get higherScore => currentScores.reduce(max);
+  int get higestPlayingScore {
+    final playingScores = players.where((player) => player.currentScore >= 0);
+    
+    try {
+      return playingScores.map((e) => e.currentScore).reduce(max);
+    } catch (e) {
+      return 15;
+    }
+  }
 
   MoscaState copyWith({
     List<MoscaPlayer>? players,
-    Map<String, int>? tempRoundScores,
+    String? message,
   }) =>
       MoscaState(
         players: players ?? this.players,
+        message: message ?? this.message,
       );
 
   @override
-  List<Object?> get props => [names, currentScores];
+  List<Object> get props => [players, message];
 }

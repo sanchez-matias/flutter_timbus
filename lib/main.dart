@@ -17,7 +17,7 @@ class BlocProviders extends StatelessWidget {
           create: (context) => NewScoreCubit(),
         ),
         BlocProvider(
-          create: (context) => MoscaBloc()..add(InitMosca()),
+          create: (context) => MoscaCubit(),
         ),
         BlocProvider(
           create: (context) => TrucoCubit(),

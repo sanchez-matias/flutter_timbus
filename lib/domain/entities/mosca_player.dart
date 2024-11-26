@@ -10,6 +10,7 @@ class MoscaPlayer {
   final List<int> scoreHistory;
 
   MoscaPlayer({
+    this.id = Isar.autoIncrement,
     this.name = 'player',
     this.currentScore = 15,
     this.scoreHistory = const [],
@@ -21,6 +22,7 @@ class MoscaPlayer {
     List<int>? scoreHistory,
   }) =>
       MoscaPlayer(
+        id: id,
         name: name ?? this.name,
         currentScore: currentScore ?? this.currentScore,
         scoreHistory: scoreHistory ?? this.scoreHistory,
