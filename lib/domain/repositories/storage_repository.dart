@@ -21,9 +21,9 @@ abstract class StorageRepository {
 
   Future<List<GeneralaPlayer>> getGeneralaPlayers();
 
-  Future<void> addGeneralaPlayers(List<GeneralaPlayer> players);
+  Future<void> setGeneralaPlayers(List<GeneralaPlayer> players);
 
-  Future<void> updateGeneralaPlayers(List<GeneralaPlayer> players);
+  Future<void> updateGeneralaPlayer(GeneralaPlayer player);
 
-  Future<void> resetGeneralaMatch();
+  Future<void> clearGeneralaMatch();
 }

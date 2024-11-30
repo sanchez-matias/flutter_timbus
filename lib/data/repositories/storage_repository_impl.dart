@@ -50,18 +50,18 @@ class StorageRepositoryImpl extends StorageRepository {
   }
 
   @override
-  Future<void> addGeneralaPlayers(List<GeneralaPlayer> players) {
-    return _datasource.addGeneralaPlayers( players);
+  Future<void> setGeneralaPlayers(List<GeneralaPlayer> players) {
+    return _datasource.setGeneralaPlayers( players);
   }
 
   @override
-  Future<void> updateGeneralaPlayers(List<GeneralaPlayer> players) {
-    return _datasource.updateGeneralaPlayers(players);
+  Future<void> updateGeneralaPlayer(GeneralaPlayer player) {
+    return _datasource.updateGeneralaPlayer(player);
   }
 
   @override
-  Future<void> resetGeneralaMatch() {
-    return _datasource.resetGeneralaMatch();
+  Future<void> clearGeneralaMatch() {
+    return _datasource.clearGeneralaMatch();
   }
   
   @override

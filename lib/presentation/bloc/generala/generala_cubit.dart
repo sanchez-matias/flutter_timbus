@@ -9,45 +9,77 @@ part 'generala_state.dart';
 class GeneralaCubit extends Cubit<GeneralaState> {
   final _repository = StorageRepositoryImpl(StorageDatasourceImpl());
 
-  GeneralaCubit() : super(const GeneralaState());
+  GeneralaCubit() : super(const GeneralaState()) {
+    _getPlayersFromDb();
+  }
 
-  void init() async {
+  void _getPlayersFromDb() async {
     final players = await _repository.getGeneralaPlayers();
     emit(state.copyWith(players: players));
   }
 
-  void addPlayers(List<String> names) async {
+  void emitMessage(String message) {
+    emit(state.copyWith(
+      message: message,
+    ));
+  }
+
+  Future<void> addPlayers(List<String> names) async {
+    if (names.length <= 1) {
+      emitMessage('Deben cargarse al menos dos jugadores');
+      return;
+    }
+
     List<GeneralaPlayer> playersList = [];
 
     for (final name in names) {
-      playersList.add(GeneralaPlayer(name: name));
+      playersList.add(GeneralaPlayer(name: name.toUpperCase()));
     }
 
-    if (playersList.isEmpty || playersList.length == 1) return;
-    emit(state.copyWith(players: playersList));
-    await _repository.addGeneralaPlayers(playersList);
+    await _repository.setGeneralaPlayers(playersList);
+    _getPlayersFromDb();
   }
 
-  void changeCellValue({
-    required int playerIndex,
-    required int rowIndex,
+  Future<void> changeCellValue({
+    required GeneralaPlayer player,
     required GeneralaCell newValue,
   }) async {
-    var playersListCopy = List<GeneralaPlayer>.from(state.players).toList();
-    final player = state.players[playerIndex];
-    final selectedMapKey = player.scoresMap.keys.toList()[rowIndex];
-    final updatedPlayer =
-        player.copyWith(newScores: {selectedMapKey: newValue});
+    final updatedPlayer = player.copyWith(newScores: {
+      '${newValue.rowValue}': newValue,
+    });
 
-    playersListCopy.removeAt(playerIndex);
-    playersListCopy.insert(playerIndex, updatedPlayer);
-    emit(state.copyWith(players: playersListCopy));
+    await _repository.updateGeneralaPlayer(updatedPlayer);
 
-    await _repository.updateGeneralaPlayers(state.players);
+    _getPlayersFromDb();
   }
 
-  void reset() async {
-    emit(state.copyWith(players: const []));
-    await _repository.resetGeneralaMatch();
+  Future<void> deleteMatch() async {
+    await _repository.clearGeneralaMatch();
+    _getPlayersFromDb();
+  }
+
+  Future<void> resetMatch() async {
+    final resetPlayers = <GeneralaPlayer>[];
+
+    for (final player in state.players) {
+      resetPlayers.add(player.copyWith(
+        newScores: {
+          '1': const GeneralaCell(rowValue: 1),
+          '2': const GeneralaCell(rowValue: 2),
+          '3': const GeneralaCell(rowValue: 3),
+          '4': const GeneralaCell(rowValue: 4),
+          '5': const GeneralaCell(rowValue: 5),
+          '6': const GeneralaCell(rowValue: 6),
+          '20': const GeneralaCell(rowValue: 20),
+          '30': const GeneralaCell(rowValue: 30),
+          '40': const GeneralaCell(rowValue: 40),
+          '50': const GeneralaCell(rowValue: 50),
+          '100': const GeneralaCell(rowValue: 100),
+        },
+      ));
+    }
+
+    await _repository.setGeneralaPlayers(resetPlayers);
+    _getPlayersFromDb();
   }
 }

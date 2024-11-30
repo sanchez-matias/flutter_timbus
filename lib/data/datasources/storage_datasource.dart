@@ -20,13 +20,12 @@ abstract class StorageDatasource {
   Future<void> resetChinchonMatch();
 
   Future<void> deleteChinchonPlayer(int id);
+  
+  Future<void> setGeneralaPlayers(List<GeneralaPlayer> players);
 
-  //! Eliminar players
-  Future<void> addGeneralaPlayers(List<GeneralaPlayer> players);
+  Future<void> updateGeneralaPlayer(GeneralaPlayer player);
 
-  Future<void> updateGeneralaPlayers(List<GeneralaPlayer> players);
-
-  Future<void> resetGeneralaMatch();
+  Future<void> clearGeneralaMatch();
 
   Future<List<GeneralaPlayer>> getGeneralaPlayers();
 }
@@ -103,22 +102,21 @@ class StorageDatasourceImpl implements StorageDatasource {
 
   //* GENERALA
   @override
-  Future<void> addGeneralaPlayers(List<GeneralaPlayer> players) async {
+  Future<void> setGeneralaPlayers(List<GeneralaPlayer> players) async {
     final isar = await db;
-    isar.writeTxn(() => isar.generalaPlayers.putAll(players));
+    await isar.writeTxn(() => isar.generalaPlayers.putAll(players));
   }
 
   @override
-  Future<void> updateGeneralaPlayers(List<GeneralaPlayer> players) async {
-    await resetGeneralaMatch();
+  Future<void> updateGeneralaPlayer(GeneralaPlayer player) async {
     final isar = await db;
-    isar.writeTxn(() => isar.generalaPlayers.putAll(players));
+    await isar.writeTxn(() => isar.generalaPlayers.put(player));
   }
 
   @override
-  Future<void> resetGeneralaMatch() async {
+  Future<void> clearGeneralaMatch() async {
     final isar = await db;
-    isar.writeTxn(() => isar.generalaPlayers.clear());
+    await isar.writeTxn(() => isar.generalaPlayers.clear());
   }
 
   @override

@@ -23,7 +23,7 @@ class BlocProviders extends StatelessWidget {
           create: (context) => TrucoCubit(),
         ),
         BlocProvider(
-          create: (context) => GeneralaCubit()..init(),
+          create: (context) => GeneralaCubit(),
         ),
         BlocProvider(
           create: (context) => ChinchonCubit(),

@@ -4,13 +4,31 @@ part 'generala_player.g.dart';
 
 @embedded
 class GeneralaCell {
-  final int value;
+  final int rowValue;
+  final int selectedOption;
   final bool isCrossedOut;
 
   const GeneralaCell({
-    this.value = 0,
+    this.rowValue = 0,
+    this.selectedOption = 0,
     this.isCrossedOut = false,
   });
+
+  @ignore
+  bool get isNumeric => rowValue < 20;
+
+  @ignore
+  int get score {
+    if (isCrossedOut) return 0;
+
+    if (isNumeric) {
+      return rowValue * selectedOption;
+    } else if (selectedOption < 2){
+      return rowValue * selectedOption;
+    } else {
+      return  rowValue + 5;
+    }
+  }
 }
 
 @collection
@@ -31,32 +49,34 @@ class GeneralaPlayer {
   final GeneralaCell double;
 
   GeneralaPlayer({
+    this.id = Isar.autoIncrement,
     this.name = 'player',
-    this.oneRow = const GeneralaCell(),
-    this.twoRow = const GeneralaCell(), 
-    this.threeRow = const GeneralaCell(), 
-    this.fourRow = const GeneralaCell(), 
-    this.fiveRow = const GeneralaCell(), 
-    this.sixRow = const GeneralaCell(), 
-    this.straight = const GeneralaCell(), 
-    this.full = const GeneralaCell(), 
-    this.poker = const GeneralaCell(), 
-    this.generala = const GeneralaCell(), 
-    this.double = const GeneralaCell(), 
+    this.oneRow = const GeneralaCell(rowValue: 1),
+    this.twoRow = const GeneralaCell(rowValue: 2), 
+    this.threeRow = const GeneralaCell(rowValue: 3), 
+    this.fourRow = const GeneralaCell(rowValue: 4), 
+    this.fiveRow = const GeneralaCell(rowValue: 5), 
+    this.sixRow = const GeneralaCell(rowValue: 6), 
+    this.straight = const GeneralaCell(rowValue: 20), 
+    this.full = const GeneralaCell(rowValue: 30), 
+    this.poker = const GeneralaCell(rowValue: 40), 
+    this.generala = const GeneralaCell(rowValue: 50), 
+    this.double = const GeneralaCell(rowValue: 100), 
   });
 
+  @ignore
   int get globalScore =>
-      oneRow.value +
-      twoRow.value +
-      threeRow.value +
-      fourRow.value +
-      fiveRow.value +
-      sixRow.value +
-      straight.value +
-      full.value +
-      poker.value +
-      generala.value +
-      double.value;
+      oneRow.score +
+      twoRow.score +
+      threeRow.score +
+      fourRow.score +
+      fiveRow.score +
+      sixRow.score +
+      straight.score +
+      full.score +
+      poker.score +
+      generala.score +
+      double.score;
 
   @ignore
   Map<String, GeneralaCell> get scoresMap => {
@@ -74,18 +94,13 @@ class GeneralaPlayer {
       };
 
   @ignore
-  List<int> get scoresList => scoresMap.values.map((cell) => cell.value).toList();
-
-  bool isCellCrossedOut(int rowIndex) {
-    final paramsList = scoresMap.values.toList();
-    return paramsList[rowIndex].isCrossedOut;
-  } 
+  List<int> get scoresList => scoresMap.values.map((cell) => cell.score).toList();
 
   GeneralaPlayer copyWith({
     required Map<String, GeneralaCell> newScores,
-    List<int>? crossedOutCells,
   }) =>
       GeneralaPlayer(
+        id: id,
         name: name,
         oneRow: newScores['1'] ?? oneRow,
         twoRow: newScores['2'] ?? twoRow,
@@ -93,10 +108,10 @@ class GeneralaPlayer {
         fourRow: newScores['4'] ?? fourRow,
         fiveRow: newScores['5'] ?? fiveRow,
         sixRow: newScores['6'] ?? sixRow,
-        straight: newScores['straight'] ?? straight,
-        full: newScores['full'] ?? full,
-        poker: newScores['poker'] ?? poker,
-        generala: newScores['generala'] ?? generala,
-        double: newScores['double'] ?? double,
+        straight: newScores['20'] ?? straight,
+        full: newScores['30'] ?? full,
+        poker: newScores['40'] ?? poker,
+        generala: newScores['50'] ?? generala,
+        double: newScores['100'] ?? double,
       );
 }
