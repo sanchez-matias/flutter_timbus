@@ -13,13 +13,14 @@ class TrucoSquareDrawer extends StatelessWidget {
   });
 
   int get howManySticks {
-    if (globalScore - relativeMaxScore >= 0) {
-      return 5;
-    } else if ((globalScore > relativeMaxScore - 5) && (globalScore < relativeMaxScore +  5)) {
-     return globalScore - (relativeMaxScore - 5);
-    } else {
-      return 0;
-    }
+    // Full square case
+    if (globalScore >= relativeMaxScore) return 5;
+    
+    // Empty sqare case
+    if (relativeMaxScore - globalScore >= 5) return 0;
+
+    // Incomplete square case
+    return 5 - (relativeMaxScore - globalScore);
   }
 
   @override

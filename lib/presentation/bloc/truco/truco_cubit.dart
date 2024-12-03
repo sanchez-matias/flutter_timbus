@@ -1,25 +1,52 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TrucoCubit extends Cubit<List<int>> {
-  TrucoCubit() : super([0, 0]);
+part 'truco_state.dart';
 
-  void addPointToUs(int score) {
-    final us = state[0];
-    if (score > 0 && us == 30) return;
-    if (score < 0 && us == 0) return;
+class TrucoCubit extends Cubit<TrucoState> {
+  TrucoCubit() : super(const TrucoState());
 
-    emit([us + score, state[1]]);
+  void addPointToUs(int addedScore) {
+    final usScore = state.scores[0];
+    if (addedScore == 1 && usScore == state.scoreLimit) return;
+    if (addedScore == -1 && usScore == 0) return;
+
+    emit(state.copyWith(
+      scores: [usScore+addedScore, state.scores[1]]
+    ));
   }
 
-  void addPointToThem(int score) {
-    final them = state[1];
-    if (score > 0 && them == 30) return;
-    if (score < 0 && them == 0) return;
+  void addPointToThem(int addedScore) {
+    final themScore = state.scores[1];
+    if (addedScore == 1 && themScore == state.scoreLimit) return;
+    if (addedScore == -1 && themScore == 0) return;
 
-    emit([state[0], them + score]);
+    emit(state.copyWith(
+      scores: [state.scores[0], themScore+addedScore]
+    ));
   }
 
   void resetGame() {
-    emit([0, 0]);
+    emit(state.copyWith(
+      scores: [0, 0]
+    ));
+  }
+
+  void changeScoreLimit(int newLimit) {
+    if (state.scores[0] > newLimit) {
+      emit(state.copyWith(
+        scores: [newLimit, state.scores[1]]
+      ));
+    }
+
+    if (state.scores[1] > newLimit) {
+      emit(state.copyWith(
+        scores: [state.scores[0], newLimit]
+      ));
+    }
+
+    emit(state.copyWith(
+      scoreLimit: newLimit,
+    ));
   }
 }
