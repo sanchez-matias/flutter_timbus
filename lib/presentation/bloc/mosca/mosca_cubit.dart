@@ -2,16 +2,16 @@ import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_timbus_annotations/data/datasources/storage_datasource.dart';
-import 'package:flutter_timbus_annotations/data/repositories/storage_repository_impl.dart';
+
 import 'package:flutter_timbus_annotations/domain/entities/mosca_player.dart';
+import 'package:flutter_timbus_annotations/domain/repositories/storage_repository.dart';
 
 part 'mosca_state.dart';
 
 class MoscaCubit extends Cubit<MoscaState> {
-  final _repository = StorageRepositoryImpl(StorageDatasourceImpl());
+  final StorageRepository _repository;
 
-  MoscaCubit() : super(const MoscaState()) {
+  MoscaCubit(this._repository) : super(const MoscaState()) {
     _getPlayersFromDb();
   }
 

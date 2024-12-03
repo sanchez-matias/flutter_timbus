@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_timbus_annotations/data/datasources/storage_datasource.dart';
+import 'package:flutter_timbus_annotations/data/repositories/storage_repository_impl.dart';
 import 'package:flutter_timbus_annotations/presentation/bloc/blocs.dart';
 import 'package:flutter_timbus_annotations/presentation/screens/screens.dart';
 import 'package:flutter_timbus_annotations/config/theme/theme.dart';
@@ -11,22 +13,25 @@ class BlocProviders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => MoscaCubit(),
-        ),
-        BlocProvider(
-          create: (context) => TrucoCubit(),
-        ),
-        BlocProvider(
-          create: (context) => GeneralaCubit(),
-        ),
-        BlocProvider(
-          create: (context) => ChinchonCubit(),
-        ),
-      ],
-      child: const MyApp(),
+    return RepositoryProvider(
+      create: (context) => StorageRepositoryImpl(StorageDatasourceImpl()),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => MoscaCubit(context.read<StorageRepositoryImpl>()),
+          ),
+          BlocProvider(
+            create: (context) => TrucoCubit(),
+          ),
+          BlocProvider(
+            create: (context) => GeneralaCubit(context.read<StorageRepositoryImpl>()),
+          ),
+          BlocProvider(
+            create: (context) => ChinchonCubit(context.read<StorageRepositoryImpl>()),
+          ),
+        ],
+        child: const MyApp(),
+      ),
     );
   }
 }
@@ -48,10 +53,10 @@ class MyApp extends StatelessWidget {
         'chinchon': (context) => const ChinchonScreen(),
         'rules': (context) => const RulesScreen(),
         'settings': (_) => const SettingsScreen(),
-        'mosca_rules':(context) => const MoscaRulesScreen(),
-        'truco_rules':(context) => const TrucoRulesScreen(),
-        'generala_rules':(context) => const GeneralaRulesScreen(),
-        'chinchon_rules':(context) => const ChinchonRulesScreen()
+        'mosca_rules': (context) => const MoscaRulesScreen(),
+        'truco_rules': (context) => const TrucoRulesScreen(),
+        'generala_rules': (context) => const GeneralaRulesScreen(),
+        'chinchon_rules': (context) => const ChinchonRulesScreen()
       },
       theme: AppTheme(isDarkMode: false).getLightTheme(),
     );

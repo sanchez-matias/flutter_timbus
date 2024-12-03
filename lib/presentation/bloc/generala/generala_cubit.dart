@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_timbus_annotations/data/datasources/storage_datasource.dart';
-import 'package:flutter_timbus_annotations/data/repositories/storage_repository_impl.dart';
+
 import 'package:flutter_timbus_annotations/domain/entities/generala_player.dart';
+import 'package:flutter_timbus_annotations/domain/repositories/storage_repository.dart';
 
 part 'generala_state.dart';
 
 class GeneralaCubit extends Cubit<GeneralaState> {
-  final _repository = StorageRepositoryImpl(StorageDatasourceImpl());
+  final StorageRepository _repository;
 
-  GeneralaCubit() : super(const GeneralaState()) {
+  GeneralaCubit(this._repository) : super(const GeneralaState()) {
     _getPlayersFromDb();
   }
 
