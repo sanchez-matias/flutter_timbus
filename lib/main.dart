@@ -14,9 +14,6 @@ class BlocProviders extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => NewScoreCubit(),
-        ),
-        BlocProvider(
           create: (context) => MoscaCubit(),
         ),
         BlocProvider(
