@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_timbus_annotations/presentation/helpers/are_you_sure_dialog.dart';
+import 'package:flutter_timbus_annotations/presentation/shared/helpers/are_you_sure_dialog.dart';
 
 class DeletePlayersDialog extends StatelessWidget {
   // Players variable must contain a list of players that have the

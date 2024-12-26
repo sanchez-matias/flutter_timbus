@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timbus_annotations/presentation/bloc/truco/truco_cubit.dart';
-import 'package:flutter_timbus_annotations/presentation/helpers/helpers.dart';
-import 'package:flutter_timbus_annotations/presentation/widgets/widgets.dart';
+import 'package:flutter_timbus_annotations/presentation/truco/bloc/truco_cubit.dart';
+import 'package:flutter_timbus_annotations/presentation/shared/helpers/helpers.dart';
+import 'package:flutter_timbus_annotations/presentation/truco/widgets/widgets.dart';
 
 class TrucoScreen extends StatelessWidget {
   const TrucoScreen({super.key});

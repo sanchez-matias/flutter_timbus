@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_timbus_annotations/data/datasources/storage_datasource.dart';
 import 'package:flutter_timbus_annotations/data/repositories/storage_repository_impl.dart';
-import 'package:flutter_timbus_annotations/presentation/bloc/blocs.dart';
-import 'package:flutter_timbus_annotations/presentation/screens/screens.dart';
+import 'package:flutter_timbus_annotations/presentation/shared/barrels/blocs.dart';
+import 'package:flutter_timbus_annotations/presentation/shared/barrels/screens.dart';
 import 'package:flutter_timbus_annotations/config/theme/theme.dart';
 
 void main() => runApp(const BlocProviders());

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_timbus_annotations/presentation/widgets/rules_slide.dart';
+import 'package:flutter_timbus_annotations/presentation/rules/widgets/rules_slide.dart';
 
 const _slides = <Slide>[
 

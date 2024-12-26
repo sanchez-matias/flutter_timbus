@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_timbus_annotations/presentation/bloc/chinchon/chinchon_cubit.dart';
-import 'package:flutter_timbus_annotations/presentation/helpers/helpers.dart';
-import 'package:flutter_timbus_annotations/presentation/widgets/widgets.dart';
+import 'package:flutter_timbus_annotations/presentation/chinchon/bloc/chinchon_cubit.dart';
+import 'package:flutter_timbus_annotations/presentation/shared/helpers/helpers.dart';
+import 'package:flutter_timbus_annotations/presentation/shared/widgets/widgets.dart';
 
 class ChinchonScreen extends StatelessWidget {
   const ChinchonScreen({super.key});
