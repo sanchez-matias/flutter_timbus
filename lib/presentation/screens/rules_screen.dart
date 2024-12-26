@@ -58,8 +58,7 @@ class RulesScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final item = _items[index];
           
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+              return Container(
                 child: MaterialButton(
                   padding: const EdgeInsets.all(15),
                   shape: const StadiumBorder(),

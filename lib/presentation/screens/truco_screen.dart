@@ -13,21 +13,12 @@ class TrucoScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-        ),
         title: const Text('Truco'),
         actions: [
           _GameOptionsMenu(
             controller: menuController,
             child: IconButton(
-              icon: const Icon(Icons.more_vert, color: Colors.white),
+              icon: const Icon(Icons.more_vert),
               onPressed: () => menuController.open(),
             ),
           ),

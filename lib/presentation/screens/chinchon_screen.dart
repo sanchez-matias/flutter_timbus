@@ -22,22 +22,13 @@ class ChinchonScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-        ),
         title: const Text('Chinchón'),
         actions: [
           _GameOptionsMenu(
             controller: menuController,
             child: IconButton(
               onPressed: () => menuController.open(),
-              icon: const Icon(Icons.more_vert, color: Colors.white),
+              icon: const Icon(Icons.more_vert),
             ),
           ),
         ],

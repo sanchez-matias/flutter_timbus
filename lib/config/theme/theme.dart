@@ -5,10 +5,11 @@ class AppTheme {
 
   AppTheme({required this.isDarkMode});
 
-  ThemeData getLightTheme() => ThemeData.light().copyWith(
-        primaryColor: const Color.fromARGB(255, 250, 229, 210),
+  ThemeData getLightTheme() => ThemeData(
+        colorSchemeSeed: const Color.fromARGB(255, 0, 28, 40),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color.fromARGB(255, 0, 28, 40),
+          foregroundColor: Colors.white,
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
         ),
         scaffoldBackgroundColor: const Color.fromARGB(255, 250, 229, 210),
@@ -24,6 +25,13 @@ class AppTheme {
             style: ButtonStyle(
           iconSize: WidgetStatePropertyAll(30),
         )),
-        // TODO: dialogTheme: const DialogTheme(),
+        dialogTheme: const DialogTheme(
+          backgroundColor: Color.fromARGB(255, 250, 229, 210),
+        ),
+        menuTheme: const MenuBarThemeData(
+          style: MenuStyle(
+            backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 250, 229, 210))
+          ),
+        ),
       );
 }
