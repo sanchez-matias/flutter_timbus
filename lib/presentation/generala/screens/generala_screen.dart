@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_timbus_annotations/domain/entities/generala_player.dart';
+import 'package:flutter_timbus_annotations/presentation/rules/screens/rules_screen.dart';
 import 'package:flutter_timbus_annotations/presentation/shared/barrels/blocs.dart';
 import 'package:flutter_timbus_annotations/presentation/shared/helpers/helpers.dart';
 
@@ -358,7 +359,13 @@ class _GameOptionsMenu extends StatelessWidget {
           leadingIcon: const Icon(Icons.list_alt),
           child: const Text('Ver reglas del juego'),
           onPressed: () {
-            Navigator.pushNamed(context, 'generala_rules');
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RulesScreen(
+                    gameName: 'Generala',
+                  ),
+                ));
           },
         ),
 

@@ -1,87 +1,123 @@
 import 'package:flutter/material.dart';
 
-class _RulesPageItem {
-  final String title;
-  final IconData iconData;
-  final String route;
+import 'package:flutter_timbus_annotations/presentation/rules/slides/slides.dart';
+import 'package:flutter_timbus_annotations/presentation/rules/slides/slideshow.dart';
+import 'package:flutter_timbus_annotations/presentation/rules/screens/rules_slideshow.dart';
 
-  _RulesPageItem({
-    required this.title,
-    required this.iconData,
-    required this.route,
-  });
+class RulesScreen extends StatefulWidget {
+  final String? gameName;
+
+  const RulesScreen({super.key, this.gameName});
+
+  @override
+  State<RulesScreen> createState() => _RulesScreenState();
 }
 
-final _items = <_RulesPageItem>[
-  _RulesPageItem(
-    title: 'La Mosca',
-    iconData: Icons.emoji_nature,
-    route: 'mosca_rules',
-  ),
-  _RulesPageItem(
-    title: 'Truco',
-    iconData: Icons.crop_square,
-    route: 'truco_rules',
-  ),
-  _RulesPageItem(
-    title: 'Generala',
-    iconData: Icons.casino,
-    route: 'generala_rules',
-  ),
-  _RulesPageItem(
-    title: 'Chinchon',
-    iconData: Icons.healing,
-    route: 'chinchon_rules',
-  ),
-];
+class _RulesScreenState extends State<RulesScreen> {
+  final slides = <Slideshow>[
+    chinchonSlides,
+    generalaSlides,
+    trucoSlides,
+    moscaSlides,
+  ];
 
-class RulesScreen extends StatelessWidget {
-  const RulesScreen({super.key});
+  @override
+  void initState() {
+    super.initState();
+
+    final selectedSlides = slides.where((element) => element.name == widget.gameName).toList();
+    if (selectedSlides.isEmpty) return;
+
+    // We must wait until the widget tree is already built to auto-push the Slideshow
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RulesSlideshow(slideshow: selectedSlides.first),
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              )),
-          title: const Text('Reglas de Juegos'),
-        ),
-        body: Center(
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              final item = _items[index];
-          
-              return Container(
-                child: MaterialButton(
-                  padding: const EdgeInsets.all(15),
-                  shape: const StadiumBorder(),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(item.iconData),
-                      const SizedBox(width: 20),
-                      Text(
-                        item.title,
-                        style: const TextStyle(fontSize: 25),
-                      ),
-                    ],
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, item.route);
-                  },
+      appBar: AppBar(
+        title: const Text('Reglas de Juegos'),
+      ),
+      body: ListView.builder(
+        itemCount: slides.length,
+        itemBuilder: (context, index) {
+          final slide = slides[index];
+
+          return _ListViewItem(slide);
+        },
+      ),
+    );
+  }
+}
+
+class _ListViewItem extends StatelessWidget {
+  final Slideshow slideshow;
+
+  const _ListViewItem(this.slideshow);
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RulesSlideshow(slideshow: slideshow),
+              ));
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Stack(
+            children: [
+              Container(
+                height: 100,
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(width: 3, color: colors.primary),
                 ),
-              );
-            },
-            separatorBuilder: (context, index) => const SizedBox(height: 20),
-            itemCount: _items.length,
+              ),
+
+              Positioned(
+                left: 20,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 30),
+                  child: Expanded(
+                    child: Text(
+                        slideshow.name,
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: colors.primary
+                        ),
+                      ),
+                  ),
+                ),
+              ),
+          
+              Positioned(
+                right: -20,
+                child: Icon(
+                  slideshow.icon,
+                  color: colors.primary,
+                  size: 80,
+                ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_timbus_annotations/presentation/rules/screens/rules_screen.dart';
 import 'package:flutter_timbus_annotations/presentation/truco/bloc/truco_cubit.dart';
 import 'package:flutter_timbus_annotations/presentation/shared/helpers/helpers.dart';
 import 'package:flutter_timbus_annotations/presentation/truco/widgets/widgets.dart';
@@ -180,7 +181,13 @@ class _GameOptionsMenu extends StatelessWidget {
           leadingIcon: const Icon(Icons.list_alt),
           child: const Text('Ver reglas del juego'),
           onPressed: () {
-            Navigator.pushNamed(context, 'truco_rules');
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RulesScreen(
+                    gameName: 'Truco',
+                  ),
+                ));
           },
         ),
 

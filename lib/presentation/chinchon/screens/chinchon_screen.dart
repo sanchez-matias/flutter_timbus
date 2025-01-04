@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_timbus_annotations/presentation/chinchon/bloc/chinchon_cubit.dart';
+import 'package:flutter_timbus_annotations/presentation/rules/screens/rules_screen.dart';
 import 'package:flutter_timbus_annotations/presentation/shared/helpers/helpers.dart';
 import 'package:flutter_timbus_annotations/presentation/shared/widgets/widgets.dart';
 
@@ -172,6 +173,20 @@ class _GameOptionsMenu extends StatelessWidget {
       controller: controller,
       menuChildren: [
         MenuItemButton(
+          leadingIcon: const Icon(Icons.list_alt),
+          child: const Text('Ver reglas del juego'),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RulesScreen(
+                    gameName: 'Chinchón',
+                  ),
+                ));
+          },
+        ),
+
+        MenuItemButton(
           leadingIcon: const Icon(Icons.onetwothree),
           child: const Text('Cambiar Límite'),
           onPressed: () async {
@@ -183,14 +198,6 @@ class _GameOptionsMenu extends StatelessWidget {
             if (context.mounted && newLimit != null) {
               context.read<ChinchonCubit>().changeScoreLimit(newLimit);
             }
-          },
-        ),
-
-        MenuItemButton(
-          leadingIcon: const Icon(Icons.list_alt),
-          child: const Text('Ver reglas del juego'),
-          onPressed: () {
-            Navigator.pushNamed(context, 'chinchon_rules');
           },
         ),
 
