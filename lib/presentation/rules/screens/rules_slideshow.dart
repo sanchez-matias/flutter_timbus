@@ -13,7 +13,6 @@ class RulesSlideshow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final size = MediaQuery.sizeOf(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -25,10 +24,14 @@ class RulesSlideshow extends StatelessWidget {
         child: Stack(
           children: [
             Expanded(child: _Slides(slideshow.name, slideshow.slides)),
+            
             Positioned(
-              left: size.width * 0.4,
+              left: 0,
+              right: 0,
               bottom: 20,
-              child: SlideshowDots(slidesCount: slideshow.slides.length),
+              child: Center(
+                child: SlideshowDots(slidesCount: slideshow.slides.length),
+              ),
             ),
           ],
         ),
