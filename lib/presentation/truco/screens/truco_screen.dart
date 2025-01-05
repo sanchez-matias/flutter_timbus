@@ -50,7 +50,7 @@ class _PlayerColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context).width * 0.15;
+    final size = MediaQuery.sizeOf(context).width * 0.12;
 
     return Expanded(
       child: Column(
