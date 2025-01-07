@@ -106,6 +106,36 @@ class MoscaCubit extends Cubit<MoscaState> {
     _getPlayersFromDb();
   }
 
-  Future<void> undoRound() async {}
+  Future<void> undoRound() async {
+    if (state.players.isEmpty || !state.isMatchDirty) return;
+
+    final newPlayersList = <MoscaPlayer>[];
+
+    for (final player in state.players) {
+      // If any of the players in the match has no entries in their history
+      // then it means that they have been recently added to the match, so
+      // we need to change their initial score according to the highest one
+      // in the previous round.
+      if (player.scoreHistory.isEmpty) {
+        newPlayersList.add(player.copyWith(
+          currentScore: state.players
+              .map((player) {
+                if (player.scoreHistory.isEmpty) return -1;
+
+                return player.scoreHistory[0];
+              })
+              .reduce(max),
+        ));
+      } else {
+        newPlayersList.add(player.copyWith(
+          currentScore: player.scoreHistory.first,
+          scoreHistory: List<int>.from(player.scoreHistory)..removeAt(0),
+        ));
+      }
+
+      await _repository.updateMoscaPlayers(newPlayersList);
+      _getPlayersFromDb();
+    }
+  }
 
 }

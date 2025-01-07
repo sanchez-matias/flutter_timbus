@@ -310,7 +310,7 @@ class _GameOptionsMenu extends StatelessWidget {
 
         MenuItemButton(
           leadingIcon: const Icon(Icons.change_circle_outlined),
-          onPressed: isStateEmpty
+          onPressed: isStateEmpty || !moscaBloc.state.isMatchDirty
               ? null
               : () => showDialog(
                   context: context,

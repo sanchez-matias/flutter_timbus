@@ -21,6 +21,8 @@ class MoscaState extends Equatable {
     }
   }
 
+  bool get isMatchDirty => players.any((player) => player.currentScore != 15);
+
   MoscaState copyWith({
     List<MoscaPlayer>? players,
     String? message,
