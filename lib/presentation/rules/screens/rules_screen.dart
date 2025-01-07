@@ -32,9 +32,7 @@ class _RulesScreenState extends State<RulesScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => RulesSlideshow(slideshow: selectedSlides.first),
-        ),
+        _createRoute(RulesSlideshow(slideshow: selectedSlides.first)),
       );
     });
   }
@@ -71,10 +69,9 @@ class _ListViewItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RulesSlideshow(slideshow: slideshow),
-              ));
+            context,
+            _createRoute(RulesSlideshow(slideshow: slideshow)),
+          );
         },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -121,3 +118,16 @@ class _ListViewItem extends StatelessWidget {
     );
   }
 }
+
+Route<Widget> _createRoute(Widget child) => PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => child,
+      transitionDuration: const Duration(milliseconds: 150),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final curvedAnimation = CurvedAnimation(parent: animation, curve: Curves.linear );
+
+        return SlideTransition(
+          position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero ).animate(curvedAnimation),
+          child: child,
+        );
+      },
+    );

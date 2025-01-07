@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_timbus_annotations/config/routes/app_routes.dart';
 import 'package:flutter_timbus_annotations/data/datasources/storage_datasource.dart';
 import 'package:flutter_timbus_annotations/data/repositories/storage_repository_impl.dart';
 import 'package:flutter_timbus_annotations/presentation/shared/barrels/blocs.dart';
-import 'package:flutter_timbus_annotations/presentation/shared/barrels/screens.dart';
 import 'package:flutter_timbus_annotations/config/theme/theme.dart';
 
 void main() => runApp(const BlocProviders());
@@ -41,19 +41,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Timbus',
-      initialRoute: 'home',
-      routes: {
-        'home': (context) => const HomeScreen(),
-        'mosca': (context) => const MoscaScreen(),
-        'truco': (context) => const TrucoScreen(),
-        'generala': (context) => const GeneralaScreen(),
-        'chinchon': (context) => const ChinchonScreen(),
-        'rules': (context) => const RulesScreen(),
-        'settings': (_) => const SettingsScreen(),
-      },
+      routerConfig: appRoutes,
       theme: AppTheme(isDarkMode: false).getLightTheme(),
     );
   }

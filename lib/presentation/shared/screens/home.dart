@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 const screens = [
   _GameOptionButton(
     title: 'La Mosca',
     icon: Icons.emoji_nature,
-    routeName: 'mosca',
+    routeName: '/mosca',
   ),
   _GameOptionButton(
     title: 'Truco',
     icon: Icons.crop_square,
-    routeName: 'truco',
+    routeName: '/truco',
   ),
   _GameOptionButton(
     title: 'Generala',
     icon: Icons.casino,
-    routeName: 'generala',
+    routeName: '/generala',
   ),
   _GameOptionButton(
     title: 'Chinchón',
     icon: Icons.healing_outlined,
-    routeName: 'chinchon',
+    routeName: '/chinchon',
   ),
 ];
 
@@ -59,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                         _CustomHeaderButton(
                           title: 'Ajustes',
                           icon: Icons.settings,
-                          routeName: 'settings',
+                          routeName: '/settings',
                         ),
 
                         SizedBox(width: 50),
@@ -67,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                         _CustomHeaderButton(
                           title: 'Reglas',
                           icon: Icons.list_alt,
-                          routeName: 'rules',
+                          routeName: '/rules',
                         ),
                       ],
                     ),
@@ -94,7 +95,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _GameOptionButton extends StatelessWidget {
+class _GameOptionButton extends StatefulWidget {
   final String title;
   final IconData icon;
   final String routeName;
@@ -106,32 +107,69 @@ class _GameOptionButton extends StatelessWidget {
   });
 
   @override
+  State<_GameOptionButton> createState() => _GameOptionButtonState();
+}
+
+class _GameOptionButtonState extends State<_GameOptionButton> with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late Animation<double> reduce;
+
+  @override
+  void initState() {
+    controller =  AnimationController(duration: const Duration(milliseconds: 100), vsync: this);
+
+    reduce = Tween(begin: 1.0, end: 0.0)
+      .animate(CurvedAnimation(parent: controller, curve: Curves.ease));
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: GestureDetector(
-        onTap: () => Navigator.pushNamed(context, routeName),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Colors.black
-            )
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Center(
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold
+      child: AnimatedBuilder(
+        animation: controller,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: reduce.value,
+            child: child,
+          );
+        },
+        child: GestureDetector(
+            onTap: () async {
+              controller.forward();
+        
+              await Future.delayed(const Duration(milliseconds: 100));
+              if (!context.mounted) return;
+        
+              context.push(widget.routeName);
+
+              await Future.delayed(const Duration(milliseconds: 100));
+              controller.reset();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.black
+                )
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Center(
+                child: Text(
+                  widget.title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
               ),
             ),
           ),
-        ),
       ),
-    );
+      );
   }
 }
 
@@ -153,7 +191,7 @@ class _CustomHeaderButton extends StatelessWidget {
     return SizedBox(
       height: size.height * 0.12,
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(context, routeName),
+        onTap: () => context.push(routeName),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
